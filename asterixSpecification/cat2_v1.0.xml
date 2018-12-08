@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+<asterix>
+  <!--
+  Part 2b
+  Transmission of
+  Monoradar Service
+  Messages
+
+  Edition: 1.0
+  Edition Date: November 1997
+-->
+  <category cat="2" version="1.0">
+    <dataitem id="I002/000" frn="2" format="fixed" length="1">
+      <name>Message Type</name>
+      <definition>This Data Item allows for a more convenient handling of the messages at the receiver side by further defining the type of transaction.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Message Type</name>
+        <enum value="1">North marker message</enum>
+        <enum value="2">Sector crossing message</enum>
+        <enum value="3">South marker message</enum>
+        <enum value="8">Activation of blind zone filtering</enum>
+        <enum value="9">Stop of blind zone filtering</enum>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. In application where transactions of various types are exchanged, the Message Type Data Item facilitates the proper message handling at the receiver side.<br/>
+    2. All Message Type values are reserved for common standard use.<br/>
+    3.The following set of Message Types are standardised for category 010 records:<br/>
+    - 001, North marker message;<br/>
+    - 002, Sector crossing message;<br/>
+    - 003, South marker message;<br/>
+    - 008, Activation of blind zone filtering;<br/>
+    - 009, Stop of blind zone filtering.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I002/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <definition>Identification of the system from which the data are received.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code fixed to zero</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. The defined SACs are listed in Part 1, Table 2 [Ref. 2]<br/>
+      2. The defined SICs are listed in Part 1, Annex B [Ref. 2]<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I002/020" frn="3" format="fixed" length="1">
+      <name>Sector Number</name>
+      <definition>Eight most significant bits of the antenna azimuth defining a particular azimuth sector.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>SECTOR NUMBER</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/(2^8)</scale>
+        <desc>(LSB) = 360°/(2^8) = approx. 1.41°</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      The use of the antenna azimuth as sector number has the advantage of being independent of the number of sectors implemented.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I002/030" frn="4" format="fixed" length="3">
+      <name>Time of Day</name>
+      <definition>Absolute time stamping expressed as UTC time.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>uint</format>
+        <name>Time of Day</name>
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>1/128</scale>
+        <desc>(LSB) = (2^-7)s = 1/128 s</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+      1. The time of day value is reset to zero each day at midnight.<br/>
+      2. For time management in radar transmission applications, refer to Part 1, paragraph 5.4 [ Ref.2].<br/>
+      3. Data Item I002/030 can have various logical meanings. In a particular
+         message, the logical meaning is implicit from its context (e.g. in a North
+         marker message it represents the antenna North crossing time; in a
+         sector message it represents the antenna sector crossing time).<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I002/041" frn="5" format="fixed" length="2">
+      <name>Antenna Rotation Speed</name>
+      <definition>Antenna rotation period as measured between two consecutive North crossings or as averaged during a period of time.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <format>uint</format>
+        <name>ANTENNA ROTATION Period</name>
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>1/128</scale>
+        <desc>(LSB) = (2^-7)s = 1/128 s</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I002/050" frn="6" format="variable" length="1">
+      <name>Station Configuration Status</name>
+      <definition>Information concerning the use and status of some vital hardware components of the radar system.</definition>
+      <field octed="1" msb="8" lsb="2">
+        <format>uint</format>
+        <name>Status</name>
+      </field>
+      <desc><b>NOTE</b><br/>
+      Due to the diversity in hardware design and requirement of
+      present and future radar stations, it is felt impractical to attempt to
+      define the individual bits.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I002/060" frn="7" format="variable" length="1">
+      <name>Station Processing Mode</name>
+      <definition>Details concerning the present status with respect to processing parameters and options.</definition>
+      <field octed="1" msb="8" lsb="2">
+        <format>uint</format>
+        <name>Status</name>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. Typical information conveyed within this Data Item includes inter alia
+       type of polarisation in use, Moving Target Indicator (MTI) in use and/or
+       definition of the range to which MTI is applied, presence of overload
+       conditions and the type of load reduction measures in use.<br/>
+    2. Only the structure of this Data Item is defined, no attempt is made to
+       standardise its contents, in order not to hamper any application or future development.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I002/070" frn="8" format="repetive" length="2">
+      <name>Plot Count Values</name>
+      <definition>Plot count values according to various plot categories, either for the last full antenna scan or for the last sector processed.</definition>
+      <field octed="1" msb="16" lsb="16">
+        <format>int</format>
+        <name>A</name>
+        <desc>Aerial identification</desc>
+        <enum value="0">Counter for antenna 1</enum>
+        <enum value="1">Counter for antenna 2</enum>
+      </field>
+      <field octed="1" msb="15" lsb="11">
+        <format>uint</format>
+        <name>IDENT</name>
+        <desc>Five-bit plot category identification code</desc>
+        <enum value="1">Sole primary plots</enum>
+        <enum value="2">Sole SSR plots</enum>
+        <enum value="3">Combined plots</enum>
+      </field>
+      <field octed="1" msb="10" lsb="1">
+        <format>uint</format>
+        <name>COUNTER</name>
+        <desc>10-bit counter value</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I002/080" frn="11" format="variable" length="1">
+      <name> Warning/Error Conditions</name>
+      <definition>Warning/error conditions affecting the functioning of the radar system itself.</definition>
+      <field octed="1" msb="8" lsb="2">
+        <format>uint</format>
+        <name>W/E Value</name>
+        <desc>First warning/error condition value</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+      Warning/error condition values 1-63 are reserved for common
+      Standard use, whereas the values 64-127 are application dependent.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I002/090" frn="10" format="fixed" length="2">
+      <name>Collimation Error</name>
+      <definition>Averaged difference in range and in azimuth for the primary target position with respect to the SSR target position as
+    calculated by the radar station.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>RANGE ERROR</name>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>1/128</scale>
+        <desc>(LSB) = 1/128 NM</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <format>int</format>
+        <name>AZIMUTH ERROR</name>
+        <unit>deg</unit>
+        <scale>360/(2^14)</scale>
+        <desc>(LSB) = 360°/(2^(16-f))</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. A default quantisation unit of 0.022° and a range between -2.8125° and
+       +2.7905° is obtained for a value of f=2.<br/>
+    2. Negative values are expressed in 2's complement form, bit-16 and bit-8
+       are set to 0 for positive values and 1 for negative values.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I002/100" frn="9" format="fixed" length="8">
+      <name>Dynamic Window - Type 1</name>
+      <definition>Signals the activation of a certain selective filtering function
+      and in a polar coordinates system the respective geographical areas.</definition>
+      <field octed="1" msb="64" lsb="49">
+        <format>uint</format>
+        <name>RHO-START</name>
+        <unit>nmi</unit>
+        <scale>1/128</scale>
+        <desc>(LSB) = 1/128 NM. Max. range = 512 NM</desc>
+      </field>
+      <field octed="1" msb="48" lsb="33">
+        <format>uint</format>
+        <name>RHO-END</name>
+        <unit>nmi</unit>
+        <scale>1/128</scale>
+        <desc>(LSB) = 1/128 NM. Max. range = 512 NM</desc>
+      </field>
+      <field octed="1" msb="32" lsb="17">
+        <format>uint</format>
+        <name>THETA-START</name>
+        <unit>deg</unit>
+        <scale>360/(2^16)</scale>
+        <desc>(LSB) = 360°/(2^16) = 0.0055°</desc>
+      </field>
+      <field octed="1" msb="16" lsb="1">
+        <format>uint</format>
+        <name>THETA-END</name>
+        <unit>deg</unit>
+        <scale>360/(2^16)</scale>
+        <desc>(LSB) = 360°/(2^16) = 0.0055°</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      The logical meaning of the polar window is defined by its context,
+      given by the Message Type (Data Item I002/000) in the record concerned.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I002/SP" frn="13" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>
+  </category>
+</asterix>

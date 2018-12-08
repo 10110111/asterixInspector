@@ -1,0 +1,11 @@
+*~
+__pycache__
+*.pyc
+*.o
+.svn
+*.pro.user*
+moc_*
+ui_*
+qrc_*
+Makefile
+

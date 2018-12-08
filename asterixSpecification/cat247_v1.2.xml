@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+<asterix>
+  <!--
+  Part 20 : Category 247
+  Version Number Exchange 
+
+  Edition: 1.2
+  Edition Date: February 2008
+-->
+  <category cat="247" version="1.2">
+    <dataitem id="I247/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <definition>Identification of the system from which the data are received.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I247/015" frn="2" format="fixed" length="1">
+      <name>Service Identification</name>
+      <definition>Identification of the service provided to one or more users.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Service Identification</name>
+      </field>
+      <desc><b>NOTE</b><br/>
+      The service identification is allocated by the system
+      </desc>      
+    </dataitem>
+    <dataitem id="I247/140" frn="3" format="fixed" length="3">
+      <name>Time of Day</name>
+      <definition>Absolute time stamping expressed as UTC.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>uint</format>
+        <name>Time Of Day</name>
+        <unit>s</unit>
+        <scale>1/128</scale>
+        <desc>(LSB) = (2^-7)s = 1/128 s</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      The time of day value is reset to zero each day at midnight.<br/>
+      </desc>
+    </dataitem>
+    <dataitem id="I247/550" frn="4" format="repetive" length="3">
+      <name>Category Version Number Report</name>
+      <definition>Version number of Categories used</definition>
+      <field octed="2" msb="24" lsb="17">
+        <format>uint</format>
+        <name>CAT</name>
+        <desc>ASTERIX Category [0..255]</desc>
+      </field>
+      <field octed="2" msb="16" lsb="9">
+        <format>uint</format>  
+        <name>Main Version</name>
+        <desc>Main Version Number [0..99]</desc>
+      </field>
+      <field octed="2" msb="8" lsb="1">
+        <format>uint</format>
+        <name>Sub Version</name>
+        <desc>Sub Version Number [0..99]</desc>
+      </field>
+    </dataitem>    
+    <dataitem id="I247/SP" frn="27" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>
+    <dataitem id="I247/RE" frn="28" format="explicit" length="1">
+      <name>Reserved Expansion Field</name>
+    </dataitem>    
+  </category>
+</asterix>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+
+<asterix>
+  <!--
+  Category 240
+  Radar Video Transmission
+
+  Edition: 1.2
+  Edition Date: August 2009
+ -->
+  <category cat="240" version="1.2">
+    
+    <dataitem id="I240/000" frn="2" format="fixed" length="1">
+      <name>Message Type</name>
+      <definition>This Data Item allows for a more convenient handling of the messages at the receiver side by further defining the type of transaction.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>MESSAGE TYPE</name>
+        <desc>Message Type</desc>
+        <enum value="1">Video Summary Message</enum>
+        <enum value="2">Video Message</enum>
+      </field>
+    </dataitem>
+
+    <dataitem id="I240/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <definition>Identification of the system from which the data are received.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+       The up-to-date list of SACs is published on the Eurocontrol Web Site
+       (http://www.eurocontrol.int/asterix).
+     </desc>
+    </dataitem>
+    
+    <dataitem id="I240/020" frn="3" format="fixed" length="4">
+      <name>Video Record Header</name>
+      <definition>Contains a message sequence identifier.</definition>
+      <field octed="1" msb="32" lsb="1">
+        <name>MSG_INDEX</name>
+        <format>uint</format>
+        <desc>Message Sequence Identifier (video record cyclic counter)</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+        The Message Sequence Identifier is used by the receiving application to detect lost messages.<br/>
+        MSG_INDEX have a length of 32 bits to ease real time encoding.<br/>
+      </desc>
+    </dataitem>
+    
+    <dataitem id="I240/030" frn="4" format="repetive" length="1">
+      <name>Video Summary</name>
+      <definition>Contains an ASCII string (free text to define stream meta data).</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>CHAR</name>
+        <format>ascii</format>
+        <desc>Character in ASCII representation</desc>
+      </field>
+    </dataitem>
+    
+    <dataitem id="I240/040" frn="5" format="fixed" length="12">
+      <name>Video Header Nano</name>
+      <description>Defines a group of video cells corresponding to a video radial: all cells have the same size in azimuth and range and are consecutive in range.</description>
+      <field octed="1" msb="96" lsb="81">
+        <name>START_AZ</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/2^16</scale> 
+        <desc>Start azimuth of the cells group LSB = 360/2^16, Range: [0;360]</desc>
+      </field>
+      <field octed="1" msb="80" lsb="65">
+        <name>END_AZ</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/2^16</scale> 
+        <desc>End azimuth of the cells group LSB = 360/2^16, Range: [0;360]</desc>
+      </field>
+      <field octed="1" msb="64" lsb="33">
+        <name>START_RG</name>
+        <format>uint</format>
+        <desc>Starting range of the cells group, expressed in number of cells. 0 is the radar location without any bias.</desc>
+      </field>
+      <field octed="1" msb="32" lsb="1">
+        <name>CELL_DUR</name>
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>10^-9</scale>
+        <desc>Video cell duration in nano-seconds. LSB = 10^-9s</desc>
+      </field>
+    </dataitem>
+    
+    <dataitem id="I240/041" frn="6" format="fixed" length="12">
+      <name>Video Header Femto</name>
+      <description>Defines a group of video cells corresponding to a video radial: all cells have the same size in azimuth and range and are consecutive in range.</description>
+      <field octed="1" msb="96" lsb="81">
+        <name>START_AZ</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/2^16</scale> 
+        <desc>Start azimuth of the cells group LSB = 360/2^16, Range: [0;360]</desc>
+      </field>
+      <field octed="1" msb="80" lsb="65">
+        <name>END_AZ</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/2^16</scale> 
+        <desc>End azimuth of the cells group LSB = 360/2^16, Range: [0;360]</desc>
+      </field>
+      <field octed="1" msb="64" lsb="33">
+        <name>START_RG</name>
+        <format>uint</format>
+        <desc>Starting range of the cells group, expressed in number of cells. 0 is the radar location without any bias.</desc>
+      </field>
+      <field octed="1" msb="32" lsb="1">
+        <name>CELL_DUR</name>
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>10^-15</scale>
+        <desc>Video cell duration in femto-seconds. LSB = 10^-15s</desc>
+      </field>
+    </dataitem>
+          
+    <dataitem id="I240/048" frn="7" format="fixed" length="2">
+      <name>Video Cells Resolution &amp; Data Compression Indicator</name>
+      <definition>This Data Item defines the bit resolution used in the coding of
+the video signal amplitude in all cells of the video group as well
+as an indicator whether data compression has been applied.</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>C</name>
+        <desc>Data Compression Indicator</desc>
+        <enum value="0">No compression applied</enum>
+        <enum value="1">Compression applied</enum>
+      </field>
+      <field octed="1" msb="15" lsb="9">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"></mandatory>      
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>RES</name>
+        <desc>Bit resolution used for the coding of the amplitude of the video signal in every cell of a video group.</desc>
+        <enum value="1">Resolution: Monobit Resolution  Coding Length in bits: 1</enum>
+        <enum value="2">Resolution: Low Resolution  Coding Length in bits: 2</enum>
+        <enum value="3">Resolution: Medium Resolution  Coding Length in bits: 4</enum>
+        <enum value="4">Resolution: High Resolution  Coding Length in bits: 8</enum>
+        <enum value="5">Resolution: Very High Resolution  Coding Length in bits: 16</enum>
+        <enum value="6">Resolution: Ultra High Resolution  Coding Length in bits: 32</enum>
+      </field>
+      <desc><b>NOTE</b><br/>
+        When the Data Compression Indicator (C) is set, shows that a data
+compression technique has been applied. The actual algorithm used and the
+related parameters have to be specified in a relevant ICD (Interface Control
+  Document).<br/>
+      </desc> 
+    </dataitem>
+      
+    <dataitem id="I048/049" frn="8" format="fixed" length="5">
+      <name> Video Octets &amp; Video Cells Counters</name>
+      <definition>This Data Item contains the number of “valid” octets (i.e. non-empty octets) used in the coding of the video signal amplitude and the number of “valid” cells in the video group. </definition>
+      <field octed="1" msb="40" lsb="25">
+        <name>NB_VB</name>
+        <format>uint</format>
+        <desc>Number of “valid” octets in the Video Block Data Volume Item; i.e. one of I240/050 or I240/051 or I240/052 whichever is present</desc>
+      </field>
+      <field octed="1" msb="24" lsb="1">
+        <name>NB_CELLS</name>
+        <format>uint</format>
+        <desc>Number of “valid” cells in the Video Block Data Volume Item; i.e. one of I240/050 or I240/051 or I240/052 whichever is present</desc>        
+      </field>
+    </dataitem>
+
+    <dataitem id="I240/050" frn="9" format="repetive" length="4">
+      <name>Video Block Low Data Volume</name>
+      <definition>Contains a group of video cells corresponding to a video radial; all
+cells have the same size in azimuth and range and are consecutive
+in range. This item shall be used in cases where a low data volume,
+up to 1020 bytes, will be transmitted.</definition>
+      <field octed="1" msb="32" lsb="1">
+        <name>VIDEO BLOCK</name>
+        <format>hex</format>
+        <desc>Video signal amplitude of the cells in the group, coded according to the resolution defined in Item I240/048</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. The first cell in the block is always the closest to the sensor and the
+        following cells are in increasing range order.<br/>
+      2. To get the range in meters of the cell at position “NU_CELL” in the data
+        stream, the following formula shall be used:<br/>
+      D = CELL_DUR (in seconds) * (START_RG + NU_CELL - 1) * c/(2.) where c = 299 792 458 m/s: light celerity.<br/>
+      </desc> 
+    </dataitem>
+
+    <dataitem id="I240/051" frn="10" format="repetive" length="64">
+      <name>Video Block Medium Data Volume</name>
+      <definition>Contains a group of video cells corresponding to a video radial; all
+cells have the same size in azimuth and range and are consecutive
+in range. This item shall be used in cases where a medium data
+volume, up to 16320 bytes, will be transmitted.</definition>
+      <field octed="1" msb="512" lsb="1">
+        <name>VIDEO BLOCK</name>
+        <format>hex</format>
+        <desc>Video signal amplitude of the cells in the group, coded according to the resolution defined in Item I240/048</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. The first cell in the block is always the closest to the sensor and the
+        following cells are in increasing range order.<br/>
+      2. To get the range in meters of the cell at position “NU_CELL” in the data
+        stream, the following formula shall be used:<br/>
+      D = CELL_DUR (in seconds) * (START_RG + NU_CELL - 1) * c/(2.) where c = 299 792 458 m/s: light celerity.<br/>
+      </desc> 
+    </dataitem>
+      
+    <dataitem id="I240/052" frn="11" format="repetive" length="256">
+      <name>Video Block High Data Volume</name>
+      <definition>Contains a group of video cells corresponding to a video radial; all
+cells have the same size in azimuth and range and are consecutive
+in range. This item shall be used in cases where a high data
+volume, up to 65024 bytes, will be transmitted.</definition>
+      <field octed="1" msb="2048" lsb="1">
+        <name>VIDEO BLOCK</name>
+        <format>hex</format>
+        <desc>Video signal amplitude of the cells in the group, coded according to the resolution defined in Item I240/048</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. The first cell in the block is always the closest to the sensor and the
+        following cells are in increasing range order.<br/>
+      2. To get the range in meters of the cell at position “NU_CELL” in the data
+        stream, the following formula shall be used:<br/>
+      D = CELL_DUR (in seconds) * (START_RG + NU_CELL - 1) * c/(2.) where c = 299 792 458 m/s: light celerity.<br/>
+      </desc> 
+    </dataitem>
+      
+    <dataitem id="I048/140" frn="12" format="fixed" length="3">
+      <name>Time of Day</name>
+      <definition>Absolute time stamping as UTC.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>uint</format>
+        <name>Time of Day</name>
+        <unit>s</unit>
+        <scale>1/128</scale>        
+        <desc>Acceptable Range of values: 0 ≤ Time-of-Day ≤ 24 hrs = 2^-7 seconds = 1/128 seconds</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    The time of day value is reset to 0 each day at midnight.<br/>
+    The time information, shall reflect the exact time of an event,
+expressed as a number of 1/128 s elapsed since last midnight.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I240/SP" frn="14" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>
+    <dataitem id="I240/RE" frn="13" format="explicit" length="1">
+      <name>Reserved Expansion Field</name>
+    </dataitem>
+
+    
+  </category>
+</asterix>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+
+<asterix>
+  <!--
+  Part 26 : Category 25
+  CNS/ATM Ground System Status Reports 
+
+  Edition: 1.1
+-->
+  <category cat="25" version="1.1">
+    <dataitem id="I025/000" frn="2" format="fixed" length="1">
+      <name>Report Type</name>
+      <definition>This Data Item allows for a more convenient handling of the reports at the receiver side by further defining the type of transaction.</definition>
+      <field octed="1" msb="8" lsb="2">
+        <name>Report Type</name>
+      </field>
+      <field octed="1" msb="1" lsb="1">
+        <name>RG</name>
+        <desc>Cat 025 Report Generation</desc>
+        <enum value="0">Periodic Report</enum>
+        <enum value="1">Event Driven Report</enum>        
+      </field>      
+    </dataitem>      
+    <dataitem id="I025/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <encodingrule>mandatory</encodingrule>
+      <definition>Identification  of  the  Ground  System  from  which  the data  is received.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I025/015" frn="4" format="fixed" length="1">
+      <name>Service Identification</name>
+      <definition>Identifies the service being reported.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Service Identification</name>
+      </field>
+    </dataitem>
+    <dataitem id="I025/020" frn="5" format="fixed" length="6">
+      <name>Service Designator</name>
+      <definition>Designator of the service being reported.</definition>
+      <field octed="1" msb="48" lsb="1">
+        <format>icao6str</format>
+        <desc>bits-48/1 Service Designator. Characters 1-8 (coded on 6 Bits each) defining the text readable designator for each Service.</desc>
+      </field>
+      <desc>
+          <b>Notes:</b><br/>
+          1. Assignments of Service designators to specific services/systems and interpretation of these fields are implementation dependent.<br/>
+          2. Examples of Service Designators are "1090ADSB", "WAM", "1090TISB", etc.<br/> 
+          3. Multiple Service Type Designators may be used to describe a single service where applicable 
+      </desc>
+    </dataitem>
+    <dataitem id="I025/070" frn="6" format="fixed" length="3">
+      <name>Time of Day</name>
+      <definition>Absolute time stamping expressed as UTC time.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>1/128</scale>
+        <name>Time of Track Information</name>
+        <desc>(LSB) = (2^-7)s = 1/128 s</desc>
+      </field>
+      <desc><b>Notes</b><br/>
+    1. The time is reset to zero at every midnight.<br/></desc>
+    </dataitem>
+    <dataitem id="I025/100" frn="7" format="variable" length="1">
+      <name>System and Service Status</name>
+      <definition>Information concerning the status of the Service Volume.</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>NOGO</name>
+        <desc>Operational Release Status of the Data</desc>
+        <enum value="0">Data is released for operational use</enum>
+        <enum value="1">Data must not be used operationally</enum>
+      </field>
+      <field octed="1" msb="7" lsb="6">
+        <name>OPS</name>
+        <desc>Operational Service Mode</desc>
+        <enum value="0">Operational</enum>
+        <enum value="1">Operational but in Standby</enum>
+        <enum value="2">Maintenance</enum>
+        <enum value="3">reserved for future use</enum>
+      </field>
+      <field octed="1" msb="5" lsb="2">
+        <name>MRH</name>
+        <desc>System and Service State</desc>
+        <enum value="0">Running</enum>
+        <enum value="1">Failed</enum>
+        <enum value="2">Degraded</enum>
+        <enum value="3">Undefined</enum>        
+        <enum value="4">4 – 15 reserved for future use</enum>
+      </field>
+      <desc><b>Notes</b><br/>
+          1. Bit 8 (NOGO), when set to “1” indicates that the data transmitted by the system/service is not released for operational use. This indication is independent from the status of the system itself or that of the service. It just indicates that the system or service volume output must not be used for operational services but may be used for, e.g. test and validation purposes. The indication GO/NO-GO indicates a mode of the system rather than a status. Usually this bit will be set by operator input. <br/>
+          2. Bit 7/6 (OPS), when set to “1” indicates that the system is running but not operationally used (e.g. for a standby system in a redundant configuration). <br/>
+          3. Bits 5/2 (SSTAT): This information informs about the state of the overall service volume status. The actual implementation of this field is service dependent and should be described in the system/service specification. However, it is expected that – as far as this information is available – a mapping is performed between the states of individual components as reported in data item I025/120.  As an example, if one component fails but the system is still operational (at least partially), the service status should change to “degraded”.
+       </desc>
+    </dataitem>
+    <dataitem id="I025/105" frn="8" format="repetive" length="1">
+      <name>System and Service Error Codes</name>
+      <definition>Error Status of the System and the Service.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>ERR</name>
+        <desc>Warning &amp; Error Codes</desc>
+        <enum value="0">No error detected (shall not be sent)</enum> 
+        <enum value="1">Error Code Undefined</enum>
+        <enum value="2">Time Source Invalid</enum> 
+        <enum value="3">Time Source Coasting</enum>
+        <enum value="4">Track ID numbering has restarted</enum>
+        <enum value="5">Data Processor Overload</enum>
+        <enum value="6">Ground Interface Data Communications Overload</enum>
+        <enum value="7">System stopped by operator</enum>
+        <enum value="8">CBIT failed</enum>
+        <enum value="9">Test Target Failure</enum>
+        <enum value="10">10 – 31 Reserved for allocation by the AMG</enum> 
+        <enum value="32">32 – 255 Reserved for allocation by system manufacturers</enum> 
+      </field>
+      <desc><b>Notes</b><br/>
+          The  Warning  &amp; Error codes contain information about the reason why the System and Service State (SSTAT in item I025/100) is different from "running".<br/>
+          1. A time source is considered as valid when either externally synchronised or running on a local oscillator within the required accuracy of UTC.<br/>
+          2. A value of 4 indicates that the allocation of Track-IDs was re-started.<br/>
+          3. Multiple error codes can be transmitted within the same ASTERIX record.<br/>
+          4. Error codes in the range 0 to 31 shall be allocated centrally by the AMG. Error codes in the range from 32 to 255 are available for specification by the system manufacturers. They are not standardised and shall be described in the Interface Control Document (ICD) of the respective system. 
+      </desc>
+    </dataitem>
+    <dataitem id="I025/120" frn="9" format="repetive" length="3">
+      <name>Component Status</name>
+      <definition>Indications of status of various system components and, when applicable, error codes.</definition>
+      <field octed="1" msb="24" lsb="9">
+        <name>CID</name>
+        <desc>The Component ID is implementation specific. A Component ID of 65535 indicates that the following error code applies to all components defined.
+        </desc>
+      </field>
+      <field octed="1" msb="8" lsb="3">
+        <name>Error Code</name>
+        <enum value="0">No Error Detected</enum>
+        <enum value="1">Error Code Undefined</enum>
+        <enum value="2">2-15 Reserved for allocation by the AMG</enum>
+        <enum value="16">16-63 Reserved for allocation by system manufacturers</enum>
+      </field>
+      <field octed="1" msb="2" lsb="1">
+        <name>CS</name>
+        <enum value="0">Running</enum>
+        <enum value="1">Failed</enum>
+        <enum value="2">Maintenance</enum>
+        <enum value="3">reserved </enum>
+      </field>
+      <desc><b>Notes</b><br/>
+      Error codes in the range 2 to 15 shall be allocated centrally by the AMG.  Error codes in the range from 16 to 63 are available for specification by the system manufacturers.  They  are  not  standardised  and  shall be  described  in  the Interface Control Document (ICD) of the respective system.
+      </desc>
+    </dataitem>
+    <dataitem id="I025/140" frn="10" format="repetive" length="6">
+      <name>Service Statistics</name>
+      <definition>Statistics concerning the service. Provides counts of various message types that have been received since the report was last sent.</definition>
+      <field octed="1" msb="48" lsb="41">
+        <name>TYPE</name>
+        <desc>Type of report counter</desc>
+        <enum value="0">Number of unknown messages received</enum>
+        <enum value="1">Number of 'too old' messages received</enum>
+        <enum value="2">Number of failed message conversions</enum>
+        <enum value="3">Total Number of messages received</enum>
+        <enum value="4">Total number of messages transmitted</enum>
+        <enum value="5">5-19 Reserved for AMG</enum>
+        <enum value="20">&gt;=20 implementation specific</enum>
+      </field>
+      <field octed="1" msb="46" lsb="46">
+        <name>REF</name>
+        <desc>Reference from which the messages are counted</desc>
+        <enum value="0">From UTC midnight</enum>
+        <enum value="1">From the previous report</enum>
+      </field>
+      <field octed="1" msb="39" lsb="33">
+        <name>SPARE</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="32" lsb="1">
+        <name>COUNTER VALUE</name>
+        <desc>32-bit counter value</desc>
+        <format>uint</format>
+      </field>
+      <desc><b>Notes</b><br/>
+        There is no special significance attributed to the numbering of the
+        TYPE field. However the range from 0 to 19 is intended to cover
+        generic messages which may be applicable to many types of service.
+      </desc>
+    </dataitem>
+    <dataitem id="I025/200" frn="3" format="fixed" length="3">
+      <name>Message Identification</name>
+      <definition>Identification of a unique message.</definition>
+      <field octed="1" msb="24" lsb="1">   
+          <name>Message Identification Number</name>
+          <format>hex</format>
+      </field>
+      <desc><b>Notes</b><br/>
+          1.The Message Identification Number is to be used to uniquely identify each message. If messages are being sent on redundant links then this number shall be identical for the same message on each link. This will allow the receiver to easily identify and discard duplicate messages.<br/>
+          2. It is not required that Message Identification Numbers be assigned in ascending order by time of message transmission.
+      </desc>
+    </dataitem>
+    <dataitem id="I025/SP" frn="11" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>    
+  </category>
+</asterix>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=asterixInspector
+GenericName=A viewer for Eurocontrol Asterix files
+Categories=Development;
+Exec=asterixInspector
+Icon=asterixInspector
+Terminal=false
+Type=Application
+StartupNotify=true

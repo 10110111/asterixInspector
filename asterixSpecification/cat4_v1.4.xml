@@ -1,0 +1,902 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+<asterix>
+<!--
+  Part 17 : Category 4
+  Safety Net Messages
+
+  Edition: 1.4
+  Edition Date: October 2010
+-->
+  <category cat="4" version="1.4">
+    <dataitem id="I004/000" frn="2" format="fixed" length="1">
+      <name>Message Type</name>
+      <definition>This Data Item allows for a more convenient handling of the messages at the receiver side by further defining the type of transaction.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Message Type</name>
+        <enum value="001">Alive Message</enum>
+        <enum value="002">Route Adherence Monitor Longitudinal Deviation</enum>
+        <enum value="003">Route Adherence Monitor Heading Deviation</enum>
+        <enum value="004">Minimum Safe Altitude Warning</enum>
+        <enum value="005">Area Proximity Warning</enum>
+        <enum value="006">Clearance Level Adherence Monitor</enum>
+        <enum value="007">Short Term Conflict Alert</enum>
+        <enum value="008">Approach Funnel Deviation Alert</enum>
+        <enum value="009">RIMCAS Arrival / Landing Monitor (ALM)</enum>
+        <enum value="010">RIMCAS Arrival / Departure Wrong Runway Alert (WRA)</enum>
+        <enum value="011">RIMCAS Arrival / Departure Opposite Traffic Alert (OTA)</enum>
+        <enum value="012">RIMCAS Departure Monitor (RDM)</enum>
+        <enum value="013">RIMCAS Runway / Taxiway Crossing Monitor (RCM)</enum>
+        <enum value="014">RIMCAS Taxiway Separation Monitor (TSM)</enum>
+        <enum value="015">RIMCAS Unauthorized Taxiway Movement Monitor(UTMM)</enum>
+        <enum value="016">RIMCAS Stop Bar Overrun Alert (SBOA)</enum>
+        <enum value="017">End Of Conflict (EOC)</enum>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. In applications where transactions of various types are exchanged, the
+      Message Type Data Item facilitates the proper message handling at the receiver side.<br/>
+    2. All Message Type values are reserved for common standard use.<br/>
+    3.The following set of Message Types are standardised for Category 004 records:<br/>
+    • 001 Alive Message<br/>
+    • 002 Route Adherence Monitor Longitudinal Deviation<br/>
+    • 003 Route Adherence Monitor Heading Deviation<br/>
+    • 004 Minimum Safe Altitude Warning<br/>
+    • 005 Area Proximity Warning<br/>
+    • 006 Clearance Level Adherence Monitor<br/>
+    • 007 Short Term Conflict Alert<br/>
+    • 008 Approach Funnel Deviation Alert<br/>
+    • 009 RIMCAS Arrival / Landing Monitor (ALM)<br/>
+    • 010 RIMCAS Arrival / Departure Wrong Runway Alert (WRA)<br/>
+    • 011 RIMCAS Arrival / Departure Opposite Traffic Alert (OTA)<br/>
+    • 012 RIMCAS Departure Monitor (RDM)<br/>
+    • 013 RIMCAS Runway / Taxiway Crossing Monitor (RCM)<br/>
+    • 014 RIMCAS Taxiway Separation Monitor (TSM)<br/>
+    • 015 RIMCAS Unauthorized Taxiway Movement Monitor(UTMM)<br/>
+    • 016 RIMCAS Stop Bar Overrun Alert (SBOA)<br/>
+    • 017 End Of Conflict (EOC)<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <definition>Identification of the Safety Nets server sending the message.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code fixed to zero</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+      The up-to-date list of SACs is published on the Eurocontrol Web Site (http://www.eurocontrol.int/asterix).<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/015" frn="3" format="repetive" length="2">
+      <name>SDPS Identifier</name>
+      <definition>Identification of the SDPS providing data to the safety nets server.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code fixed to zero</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+      The up-to-date list of SACs is published on the Eurocontrol Web Site (http://www.eurocontrol.int/asterix).<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/020" frn="4" format="fixed" length="3">
+      <name>Time of Message</name>
+      <definition>Absolute time stamping of the message in the form of elapsed time since last midnight</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>uint</format>
+        <name>Time of Message</name>
+        <desc>(LSB) = (2^-7)s = 1/128 s</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    This time is given at an application level (e.g. time at which a message is
+    filled), and not at the communication level (i.e. not the time at which the data-
+    block containing the message is sent).<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/030" frn="8" format="fixed" length="2">
+      <name>Track Number 1</name>
+      <definition>Identification of a track number related to conflict</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>Track Number 1</name>
+        <desc>0 to 65535</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. This is the track number of the first track involved in the conflict in case
+      of an STCA or a RIMCA or the track involved in case of one of the other Safety Net functions.<br/>
+    2.This track number is distributed in this field exactly as it was received
+    from the Radar Processor Unit (identified by I004/015) and its range is
+      depending on the range used by that unit<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/035" frn="16" format="fixed" length="2">
+      <name>Track Number 2</name>
+      <definition> Together with I004/030, this item defines the track pair in conflict.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>Track Number 2</name>
+        <desc>0 to 65535</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. This is the track number of the second track involved in the conflict in case of an STCA or a RIMCA.<br/>
+    2. For the other Safety Net functions, this item is not used.<br/>
+    3. This track number is distributed in this field exactly as it was received
+      from the Radar Processor Unit and its range is depending on the range used by that unit<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/040" frn="5" format="fixed" length="2">
+      <name>Alert Identifier</name>
+      <definition>Identification of an alert (Alert number)</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>Alert Identifier</name>
+        <desc>0 to 65535</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1.This item is the Alert Identification of the conflict in the system<br/>
+    2.This number shall be assigned, by the Safety Net Server, incrementally
+      to every new alert and restart on zero after reaching the maximum value (65535)<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/045" frn="6" format="fixed" length="1">
+      <name>Alert Status</name>
+      <definition>Information concerning status of the alert</definition>
+      <field octed="1" msb="8" lsb="5">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="4" lsb="2">
+        <name>Alert status</name>
+        <desc>Status of the alert</desc>
+      </field>
+      <field octed="1" msb="1" lsb="1">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <desc><b>NOTES</b><br/>
+    The content of this item is implementation dependent.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/060" frn="7" format="variable" length="1">
+      <name>Safety Net Function and System Status</name>
+      <definition>Status of the Safety Nets functions handled by the system</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>MRVA</name>
+        <enum value="0">Default</enum>
+        <enum value="1">MRVA function</enum>
+      </field>
+      <field octed="1" msb="7" lsb="7">
+        <name>RAMLD</name>
+        <enum value="0">Default</enum>
+        <enum value="1">RAMLD function</enum>
+      </field>
+      <field octed="1" msb="6" lsb="6">
+        <name>RAMHD</name>
+        <enum value="0">Default</enum>
+        <enum value="1">RAMHD function</enum>
+      </field>
+      <field octed="1" msb="5" lsb="5">
+        <name>MSAW</name>
+        <enum value="0">Default</enum>
+        <enum value="1">MSAW function</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>APW</name>
+        <enum value="0">Default</enum>
+        <enum value="1">APW function</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>CLAM</name>
+        <enum value="0">Default</enum>
+        <enum value="1">CLAM function</enum>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>STCA</name>
+        <enum value="0">Default</enum>
+        <enum value="1">STCA function</enum>
+      </field>
+      <field octed="2" msb="8" lsb="8">
+        <name>AFDA</name>
+        <enum value="0">Default</enum>
+        <enum value="1">AFDA function</enum>
+      </field>
+      <field octed="2" msb="7" lsb="7">
+        <name>RIMCA</name>
+        <enum value="0">Default</enum>
+        <enum value="1">RIMCA function</enum>
+      </field>
+      <field octed="2" msb="6" lsb="4">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="2" msb="3" lsb="3">
+        <name>OF</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Overflow error</enum>
+      </field>
+      <field octed="2" msb="2" lsb="2">
+        <name>OL</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Overload error</enum>
+      </field>
+      <desc><b>NOTE</b><br/>
+    1. This item only sent in “alive messages” to describe the status of the
+      Safety Net functions, handled by the system<br/>
+    2. Value 0 means either that the function is not managed by the system or
+      has failed.<br/>
+    3. Value 1 means that the function is managed by the system and is running well<br/>
+    4. “Overflow” is defined as a situation where the number of alerts in the
+      system has exceeded the threshold for safe operation. Potential
+      prioritization of the alerts may lead to a loss of information.<br/>
+    5. “Overload” is defined as a system status in which the number of alerts
+      does not allow for a reliable performance. A correct calculation and
+      transmission cannot be guaranteed.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/070" frn="11" format="compound" length="1">
+      <name>Conflict Timing and Separation</name>
+      <definition>Information on Timing and Aircraft Separation</definition>
+      <subfield frn="1" format="fixed" length="3">
+        <name>Time to Conflict</name>
+        <definition>Time remaining to actual conflict situation</definition>
+        <field octed="1" msb="24" lsb="1">
+          <format>int</format>
+          <name>Time to conflict</name>
+          <desc>(LSB)= (2^-7) sec = 1/128 sec</desc>
+        </field>
+      </subfield>
+      <subfield frn="2" format="fixed" length="3">
+        <name>Time to Closest Approach</name>
+        <definition>Time to closest proximity between entities in conflict</definition>
+        <field octed="1" msb="24" lsb="1">
+          <format>int</format>
+          <name>Time to closest approach</name>
+          <desc>(LSB)= (2^-7) sec = 1/128 sec</desc>
+        </field>
+      </subfield>
+      <subfield frn="3" format="fixed" length="3">
+        <name>Current Horizontal Separation</name>
+        <definition>Current Horizontal Separation</definition>
+        <field octed="1" msb="24" lsb="1">
+          <format>int</format>
+          <name>Horizontal Separation</name>
+          <desc>(Current horizontal separation) LSB = 0.5m</desc>
+        </field>
+      </subfield>
+      <subfield frn="4" format="fixed" length="2">
+        <name>Estimated Minimum Horizontal Separation</name>
+        <definition>Estimated minimum horizontal separation</definition>
+        <field octed="1" msb="16" lsb="1">
+          <format>int</format>
+          <name>Estimated minimum horizontal separation</name>
+          <desc>(Estimated minimum horizontal separation) LSB = 0.5m</desc>
+        </field>
+      </subfield>
+      <subfield frn="5" format="fixed" length="2">
+        <name>Current Vertical Separation</name>
+        <definition>Current vertical separation</definition>
+        <field octed="1" msb="16" lsb="1">
+          <format>int</format>
+          <name>Current vertical separation</name>
+          <desc>(Current vertical separation) LSB = 25 ft</desc>
+        </field>
+      </subfield>
+      <subfield frn="6" format="fixed" length="2">
+        <name>Estimated Minimum Vertical Separation</name>
+        <definition>Estimated minimum vertical separation</definition>
+        <field octed="1" msb="16" lsb="1">
+          <format>int</format>
+          <name>Estimated minimum vertical separation</name>
+          <desc>(Estimated minimum vertical separation) LSB = 25 ft</desc>
+        </field>
+      </subfield>
+    </dataitem>
+    <dataitem id="I004/074" frn="13" format="fixed" length="2">
+      <name>Longitudinal Deviation</name>
+      <definition>Longitudinal deviation for Route Adherence Monitoring, in two’s complement form.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>Longitudinal deviation</name>
+        <desc>(Longitudinal deviation) LSB = 32m</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    Longitudinal deviation will be positive if the aircraft is ahead of its planned position.<br/>
+    Longitudinal deviation will be negative if the aircraft is behind its planned position.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/075" frn="14" format="fixed" length="3">
+      <name>Transversal Distance Deviation</name>
+      <definition>Transversal distance deviation for Route Adherence Monitoring, in two’s complement form.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <name>Transversal Distance Deviation</name>
+        <desc>(Current horizontal separation) LSB = 0.5m</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    Clockwise deviation will be coded as a positive value.<br/>
+    Anticlockwise deviation will be coded as a negative value<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/076" frn="12" format="fixed" length="2">
+      <name>Vertical Deviation</name>
+      <definition>Vertical Deviation from planned altitude, in two’s complement form.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>Vertical deviation</name>
+        <desc>(Vertical deviation) LSB = 25 ft</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    Positive value if aircraft is above planned altitude<br/>
+    Negative value if aircraft is below planned altitude<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/100" frn="15" format="compound" length="1">
+      <name>Area Definition</name>
+      <definition>Definition of Areas involved in a Safety Net Alert</definition>
+      <subfield frn="1" format="fixed" length="6">
+        <name>Area Name</name>
+        <definition>Name of the area involved in an APW alarm</definition>
+        <field octed="1" msb="48" lsb="1">
+          <format>icao6str</format>
+          <desc>Characters 1-8 (coded on 6 Bits each) defining the name of the area. Coding rules are provided in [4] Section 3.1.2.9</desc>
+        </field>
+        <desc><b>NOTE</b><br/>
+       The area name is always left adjusted. If needed, the remaining characters are filled with space character.
+      </desc>
+      </subfield>
+      <subfield frn="2" format="fixed" length="7">
+        <name>Crossing Area Name</name>
+        <definition>Name of Crossing Area Involved in a RIMCA</definition>
+        <field octed="1" msb="56" lsb="1">
+          <format>ascii</format>
+          <desc>Each octet is an ASCII character defining the name of the crossing area involved in a
+        runway/taxiway crossing alert (message type 013)</desc>
+        </field>
+        <desc><b>NOTE</b><br/>
+      The name of the crossing area is always left adjusted. If needed, the remaining characters are filled with space characters.
+      </desc>
+      </subfield>
+      <subfield frn="3" format="fixed" length="7">
+        <name>Runway/Taxiway Designator 1</name>
+        <definition>Designator of Runway/Taxiway 1 Involved in a RIMCA</definition>
+        <field octed="1" msb="56" lsb="1">
+          <format>ascii</format>
+          <desc>Each octet is an ASCII character defining the runway designator</desc>
+        </field>
+        <desc><b>NOTE</b><br/>
+      The runway designator is always left adjusted. If needed, the
+      remaining characters are filled with space characters.<br/>
+      The runway is encoded as follows: Location indicator, runway
+      direction, left or right.<br/>
+      Example: EGLL09L means London Heathrow (EGLL), Runway 09 (direction 090 degrees) left runway<br/>
+      </desc>
+      </subfield>
+      <subfield frn="4" format="fixed" length="7">
+        <name>Runway/Taxiway Designator 2</name>
+        <definition>Designator of Runway/Taxiway 2 Involved in a RIMCA</definition>
+        <field octed="1" msb="56" lsb="1">
+          <format>ascii</format>
+          <desc>Each octet is an ASCII character defining the runway designator</desc>
+        </field>
+        <desc><b>NOTE</b><br/>
+      The runway designator is always left adjusted. If needed, the
+      remaining characters are filled with space characters.<br/>
+      The runway is encoded as follows: Location indicator, runway
+      direction, left or right.<br/>
+      Example: EGLL09L means London Heathrow (EGLL), Runway 09 (direction 090 degrees) left runway<br/>
+      </desc>
+      </subfield>
+      <subfield frn="5" format="fixed" length="7">
+        <name>Stop Bar Designator</name>
+        <definition>Designator of Stop-Bar Involved in a RIMCA</definition>
+        <field octed="1" msb="56" lsb="1">
+          <format>ascii</format>
+          <desc>Each octet is an ASCII character defining the stop-bar involved in a stop-bar crossed alert (message type 016)</desc>
+        </field>
+        <desc><b>NOTE</b><br/>
+      The stop-bar designator is always left adjusted. If needed, the
+      remaining characters are filled with space characters.<br/>
+      </desc>
+      </subfield>
+      <subfield frn="6" format="fixed" length="7">
+        <name>Gate Designator</name>
+        <definition>Gate Designator (in 7 characters) of the approaching aircraft in a RIMCA</definition>
+        <field octed="1" msb="56" lsb="1">
+          <format>ascii</format>
+          <desc>Each octet is an ASCII character defining the gate for the approaching aircraft</desc>
+        </field>
+        <desc><b>NOTE</b><br/>
+      The gate designator is always left adjusted. If needed, the
+      remaining characters are filled with space characters.<br/>
+      </desc>
+      </subfield>
+    </dataitem>
+    <dataitem id="I004/110" frn="18" format="repetive" length="2">
+      <name>FDPS Sector Control Identification</name>
+      <definition>Identification of a list of FDPS Sector Control Positions in charge of the involved targets, as provided by the FDPS</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>Centre</name>
+        <desc>Centre identification code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>Position</name>
+        <desc>Control position identification code</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    The Centre identification code and the Control position identification
+    code must be defined between the communication partners.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I004/120" frn="10" format="compound" length="1">
+      <name>Conflict Characteristics</name>
+      <definition>Description of the Conflict Properties</definition>
+      <subfield frn="1" format="variable" length="1">
+        <name>Conflict Nature</name>
+        <definition>Nature of the conflict expressed by a set of properties
+        Variable length Data Item comprising a first part of one octet.</definition>
+        <field octed="1" msb="8" lsb="8">
+          <name>MAS</name>
+          <desc>Conflict location in military airspace</desc>
+          <enum value="0">conflict not predicted to occur in military airspace</enum>
+          <enum value="1">conflict predicted to occur in military airspace</enum>
+        </field>
+        <field octed="1" msb="7" lsb="7">
+          <name>CAS</name>
+          <desc>Conflict location in civil airspace</desc>
+          <enum value="0">conflict not predicted to occur in civil airspace</enum>
+          <enum value="1">conflict predicted to occur in civil airspace</enum>
+        </field>
+        <field octed="1" msb="6" lsb="6">
+          <name>FLD</name>
+          <desc>Fast lateral divergence</desc>
+          <enum value="0">Aircraft are not fast diverging laterally at current time</enum>
+          <enum value="1">Aircraft are fast diverging laterally at current time</enum>
+        </field>
+        <field octed="1" msb="5" lsb="5">
+          <name>FVD</name>
+          <desc>Fast vertical divergence</desc>
+          <enum value="0">Aircraft are not fast diverging vertically at current time</enum>
+          <enum value="1">Aircraft are fast diverging vertically at current time</enum>
+        </field>
+        <field octed="1" msb="4" lsb="4">
+          <name>Type</name>
+          <desc>Type of separation infringement</desc>
+          <enum value="0">Minor separation infringement</enum>
+          <enum value="1">Major separation infringement</enum>
+        </field>
+        <field octed="1" msb="3" lsb="3">
+          <name>Cross</name>
+          <desc>Crossing test</desc>
+          <enum value="0">Aircraft have not crossed at starting time of conflict</enum>
+          <enum value="1">Aircraft have crossed at starting time of conflict</enum>
+        </field>
+        <field octed="1" msb="2" lsb="2">
+          <name>Div</name>
+          <desc>Divergence test</desc>
+          <enum value="0">Aircraft are not diverging at starting time of conflict</enum>
+          <enum value="1">Aircraft are diverging at starting time of conflict</enum>
+        </field>
+        <field octed="2" msb="8" lsb="8">
+          <name>RRC</name>
+          <desc>Runway/Runway crossing in RIMCAS</desc>
+          <enum value="0">Default</enum>
+          <enum value="1">Runway/Runway Crossing</enum>
+        </field>
+        <field octed="2" msb="7" lsb="7">
+          <name>RTC</name>
+          <desc>Runway/Taxiway crossing in RIMCAS</desc>
+          <enum value="0">Default</enum>
+          <enum value="1">Runway/Taxiway Crossing</enum>
+        </field>
+        <field octed="2" msb="6" lsb="6">
+          <name>MRVA</name>
+          <enum value="0">Default</enum>
+          <enum value="1">Msg Type 4 (MSAW) indicates MRVA</enum>
+        </field>
+        <field octed="1" msb="5" lsb="2">
+          <name>Spare</name>
+          <desc>Spare Bits set to zero</desc>
+          <mandatory value="0"/>
+        </field>
+        <desc><b>NOTES</b><br/>
+      The spare bits and extended octets may be used to define additional properties of a conflict.</desc>
+      </subfield>
+      <subfield frn="2" format="fixed" length="1">
+        <name>Conflict Classification</name>
+        <definition>Severity classification of the conflict</definition>
+        <field octed="1" msb="8" lsb="5">
+          <name>Table Id</name>
+          <desc>Identification of conflict categories definition table</desc>
+          <enum value="0">STCA separation infringement table</enum>
+          <enum value="1">STCA filter status table</enum>
+          <enum value="10">RIMCAS alert table </enum>
+        </field>
+        <field octed="1" msb="4" lsb="2">
+          <name>Serverity Class</name>
+          <desc>Conflict Severity Class (depending on table)</desc>
+        </field>
+        <field octed="1" msb="1" lsb="1">
+          <name>CS</name>
+          <desc>Conflict Severity</desc>
+          <enum value="0">LOW</enum>
+          <enum value="1">HIGH</enum>
+        </field>
+        <desc><b>NOTES</b><br/>
+        Additional conflict classes may be defined by introducing additional properties of a conflict.
+      </desc>
+      </subfield>
+      <subfield frn="3" format="fixed" length="1">
+        <name>Conflict Probability</name>
+        <definition>Probality of the conflict</definition>
+        <field octed="1" msb="8" lsb="1">
+          <name>Probability</name>
+          <desc>Conflict probability LSB = 0.5%</desc>
+        </field>
+      </subfield>
+      <subfield frn="4" format="fixed" length="3">
+        <name>Conflict Duration</name>
+        <definition>The duration of the conflict is the elapsed time since the declaration of the conflict.</definition>
+        <field octed="1" msb="24" lsb="1">
+          <name>Duration</name>
+          <desc>Conflict duration LSB = 1/128 sec</desc>
+        </field>
+      </subfield>
+    </dataitem>
+    <dataitem id="I004/170" frn="9" format="compound" length="2">
+      <name>Aircraft Identification and Characteristics 1</name>
+      <definition>Identification and Characteristics of Aircraft 1 Involved in the Conflict.</definition>
+      <subfield frn="1" format="fixed" length="7">
+        <name>Aircraft Identifier 1</name>
+        <definition>Aircraft Identifier (in 7 characters) of Aircraft 1 Involved in the Conflict</definition>
+        <field octed="1" msb="56" lsb="1">
+          <format>ascii</format>
+          <desc>Each octet is an ASCII character defining the first aircraft</desc>
+        </field>
+        <desc><b>NOTES</b><br/>
+      The aircraft identifier is always left adjusted. If needed, the remaining characters are filled with space character.<br/>
+      </desc>
+      </subfield>
+      <subfield frn="2" format="fixed" length="2">
+        <name>Mode 3/A Code Aircraft 1</name>
+        <definition>Mode-3/A code (converted into octal representation) of Aircraft 1 Involved in the Conflict</definition>
+        <field octed="1" msb="16" lsb="13">
+          <name>Spare</name>
+          <desc>Spare Bits set to zero</desc>
+          <mandatory value="0"/>
+        </field>
+        <field octed="1" msb="12" lsb="1">
+          <format>octal</format>
+          <desc>Mode-3/A reply in octal representation</desc>
+        </field>
+      </subfield>
+      <subfield frn="3" format="fixed" length="10">
+        <name>Predicted Conflict Position Aircraft 1 (WGS-84)</name>
+        <definition>Predicted conflict position target 1 in WGS-84 Coordinates.</definition>
+        <field octed="1" msb="80" lsb="49">
+          <name>Latitude</name>
+          <format>int</format>
+          <desc>In WGS.84 in two’s complement. Range -90 ≤ ≤ latitude ≤ 90 deg. LSB = 180/2^25 degrees</desc>
+        </field>
+        <field octed="1" msb="48" lsb="17">
+          <name>Longitude</name>
+          <format>int</format>
+          <desc>In WGS.84 in two’s complement. Range -180 ≤ longitude &lt; 180 deg. = 180/2^25 degrees</desc>
+        </field>
+        <field octed="1" msb="16" lsb="1">
+          <name>Altitude</name>
+          <format>int</format>
+          <desc>Altitude of predicted conflict (LSB)= 25ft, Hmin = -15FL, Hmax = 1500FL</desc>
+        </field>
+      </subfield>
+      <subfield frn="4" format="fixed" length="8">
+        <name>Predicted Conflict Position Aircraft 1 in Cartesian Coordinates</name>
+        <definition>Predicted conflict position for the aircraft 1 involved in the conflict</definition>
+        <field octed="1" msb="64" lsb="41">
+          <name>X-position</name>
+          <format>int</format>
+          <desc>Starting X-position of the conflict LSB = 0.5m</desc>
+        </field>
+        <field octed="1" msb="40" lsb="17">
+          <name>Y-position</name>
+          <format>int</format>
+          <desc>Starting Y-position of the conflict LSB = 0.5m</desc>
+        </field>
+        <field octed="1" msb="16" lsb="1">
+          <name>Z-position</name>
+          <format>int</format>
+          <desc>Starting Z-position of the conflict LSB = 25ft</desc>
+        </field>
+      </subfield>
+      <subfield frn="5" format="fixed" length="3">
+        <name>Time to Threshold Aircraft 1</name>
+        <definition>Time to runway threshold for first approaching aircraft in a RIMCA</definition>
+        <field octed="1" msb="24" lsb="1">
+          <name>Time to threshold</name>
+          <format>int</format>
+          <desc>(LSB) = (2^-7) sec = 1/128 sec</desc>
+        </field>
+      </subfield>
+      <subfield frn="6" format="fixed" length="2">
+        <name>Distance to Threshold Aircraft 1</name>
+        <definition>Distance from threshold for Aircraft 1 involved in a RIMCA.</definition>
+        <field octed="1" msb="16" lsb="1">
+          <name>Distance to threshold</name>
+          <format>int</format>
+          <desc>(LSB) = 0.5m</desc>
+        </field>
+      </subfield>
+      <subfield frn="7" format="variable" length="1">
+        <name>Aircraft Characteristics Aircraft 1</name>
+        <definition>Characteristics of Aircraft 1 involved in the Conflict</definition>
+        <field octed="1" msb="8" lsb="7">
+          <name>GAT/OAT</name>
+          <enum value="0">Unknown</enum>
+          <enum value="1">General Air Traffic</enum>
+          <enum value="2">Operational Air Traffic</enum>
+          <enum value="3">Not applicable</enum>
+        </field>
+        <field octed="1" msb="6" lsb="5">
+          <name>FR1/FR2</name>
+          <enum value="0">Instrument Flight Rules</enum>
+          <enum value="1">Visual Flight rules</enum>
+          <enum value="2">Not applicable</enum>
+          <enum value="3">Controlled Visual Flight Rules</enum>
+        </field>
+        <field octed="1" msb="4" lsb="3">
+          <name>RVSM</name>
+          <enum value="0">Unknown</enum>
+          <enum value="1">Approved</enum>
+          <enum value="2">Exempt</enum>
+          <enum value="3">Not Approved</enum>
+        </field>
+        <field octed="1" msb="2" lsb="2">
+          <name>HPR</name>
+          <enum value="0">Normal Priority Flight</enum>
+          <enum value="1">High Priority Flight</enum>
+        </field>
+        <field octed="2" msb="8" lsb="7">
+          <name>CDM</name>
+          <desc>Climbing/Descending mode</desc>
+          <enum value="0">Maintaining</enum>
+          <enum value="1">Climbing</enum>
+          <enum value="2">Descending</enum>
+          <enum value="3">Invalid</enum>
+        </field>
+        <field octed="2" msb="6" lsb="6">
+          <name>PRI</name>
+          <enum value="0">Non primary target</enum>
+          <enum value="1">Primary target</enum>
+        </field>
+        <field octed="2" msb="5" lsb="5">
+          <name>GV</name>
+          <enum value="0">Default</enum>
+          <enum value="1">Ground Vehicle</enum>
+        </field>
+        <field octed="2" msb="4" lsb="2">
+          <name>Spare</name>
+          <desc>Spare Bits set to zero</desc>
+          <mandatory value="0"/>
+        </field>
+      </subfield>
+      <subfield frn="8" format="fixed" length="6">
+        <name>Mode-S Identifier Aircraft 1</name>
+        <definition>Aircraft Identification downloaded from Aircraft 1 involved in the Conflict if equipped with a Mode-S transponder.</definition>
+        <field octed="1" msb="48" lsb="1">
+          <format>icao6str</format>
+          <desc>Characters 1-8 (coded on 6 bits each) defining aircraft identification when a flight plan is available or the
+          registration marking when no flight plan is available.Coding rules are provided in [4] Section 3.1.2.9
+        </desc>
+        </field>
+      </subfield>
+      <subfield frn="9" format="fixed" length="4">
+        <name>Flight Plan Number Aircraft 1</name>
+        <definition>Number of the Flight Plan Correlated to Aircraft 1 Involved in the Conflict</definition>
+        <field octed="2" msb="32" lsb="28">
+          <name>Spare</name>
+          <desc>Spare Bits set to zero</desc>
+          <mandatory value="0"/>
+        </field>
+        <field octed="1" msb="27" lsb="1">
+          <format>uint</format>
+          <name>NBR</name>
+          <desc>Number from 0 to 99 999 999</desc>
+        </field>
+      </subfield>
+      <subfield frn="10" format="fixed" length="2">
+        <name>Cleared Flight Level Aircraft 1</name>
+        <definition>Cleared Flight Level for Aircraft 1 Involved in the Conflict</definition>
+        <field octed="1" msb="16" lsb="1">
+          <format>uint</format>
+          <name>CFL</name>
+          <desc>Cleared Flight Level LSB = 1/4 FL</desc>
+        </field>
+      </subfield>
+    </dataitem>
+    <dataitem id="I004/171" frn="17" format="compound" length="2">
+      <name>Aircraft Identification and Characteristics 2</name>
+      <definition>Identification and Characteristics of Aircraft 2 Involved in the Conflict.</definition>
+      <subfield frn="1" format="fixed" length="7">
+        <name>Aircraft Identifier 2</name>
+        <definition>Aircraft Identifier (in 7 characters) of Aircraft 2 Involved in the Conflict</definition>
+        <field octed="1" msb="56" lsb="1">
+          <format>ascii</format>
+          <desc>Each octet is an ASCII character defining the first (SIC!) aircraft</desc>
+        </field>
+        <desc><b>NOTES</b><br/>
+      The aircraft identifier is always left adjusted. If needed, the remaining characters are filled with space character.<br/>
+      </desc>
+      </subfield>
+      <subfield frn="2" format="fixed" length="2">
+        <name>Mode 3/A Code Aircraft 2</name>
+        <definition>Mode-3/A code (converted into octal representation) of Aircraft 2 Involved in the Conflict</definition>
+        <field octed="1" msb="16" lsb="13">
+          <name>Spare</name>
+          <desc>Spare Bits set to zero</desc>
+          <mandatory value="0"/>
+        </field>
+        <field octed="1" msb="12" lsb="1">
+          <format>octal</format>
+          <desc>Mode-3/A reply in octal representation</desc>
+        </field>
+      </subfield>
+      <subfield frn="3" format="fixed" length="10">
+        <name>Predicted Conflict Position Aircraft 2 (WGS-84)</name>
+        <definition>Predicted conflict position target 2 in WGS-84 Coordinates.</definition>
+        <field octed="1" msb="80" lsb="49">
+          <name>Latitude</name>
+          <format>int</format>
+          <desc>In WGS.84 in two’s complement. Range -90 ≤ latitude ≤ 90 deg. LSB = 180/2^25 degrees</desc>
+        </field>
+        <field octed="1" msb="48" lsb="17">
+          <name>Longitude</name>
+          <format>int</format>
+          <desc>In WGS.84 in two’s complement. Range -180 ≤ longitude &lt; 180 deg. = 180/2^25 degrees</desc>
+        </field>
+        <field octed="1" msb="16" lsb="1">
+          <name>Altitude</name>
+          <format>int</format>
+          <desc>Altitude of predicted conflict (LSB)= 25ft, Hmin = -15FL, Hmax = 1500FL</desc>
+        </field>
+      </subfield>
+      <subfield frn="4" format="fixed" length="8">
+        <name>Predicted Conflict Position Aircraft 2 in Cartesian Coordinates</name>
+        <definition>Predicted conflict position for the aircraft 2 involved in the conflict</definition>
+        <field octed="1" msb="64" lsb="41">
+          <name>X-position</name>
+          <format>int</format>
+          <desc>Starting X-position of the conflict LSB = 0.5m</desc>
+        </field>
+        <field octed="1" msb="40" lsb="17">
+          <name>Y-position</name>
+          <format>int</format>
+          <desc>Starting Y-position of the conflict LSB = 0.5m</desc>
+        </field>
+        <field octed="1" msb="16" lsb="1">
+          <name>Z-position</name>
+          <format>int</format>
+          <desc>Starting Z-position of the conflict LSB = 25ft</desc>
+        </field>
+      </subfield>
+      <subfield frn="5" format="fixed" length="3">
+        <name>Time to Threshold Aircraft 2</name>
+        <definition>Time to runway threshold for first (SIC!) approaching aircraft in a RIMCA</definition>
+        <field octed="1" msb="24" lsb="1">
+          <name>Time to threshold</name>
+          <format>int</format>
+          <desc>(LSB) = (2^-7) sec = 1/128 sec</desc>
+        </field>
+      </subfield>
+      <subfield frn="6" format="fixed" length="2">
+        <name>Distance to Threshold Aircraft 2</name>
+        <definition>Distance from threshold for Aircraft 2 involved in a RIMCA.</definition>
+        <field octed="1" msb="16" lsb="1">
+          <name>Distance to threshold</name>
+          <format>int</format>
+          <desc>(LSB) = 0.5m</desc>
+        </field>
+      </subfield>
+      <subfield frn="7" format="variable" length="1">
+        <name>Aircraft Characteristics Aircraft 2</name>
+        <definition>Characteristics of Aircraft 2 involved in the Conflict</definition>
+        <field octed="1" msb="8" lsb="7">
+          <name>GAT/OAT</name>
+          <enum value="0">Unknown</enum>
+          <enum value="1">General Air Traffic</enum>
+          <enum value="2">Operational Air Traffic</enum>
+          <enum value="3">Not applicable</enum>
+        </field>
+        <field octed="1" msb="6" lsb="5">
+          <name>FR1/FR2</name>
+          <enum value="0">Instrument Flight Rules</enum>
+          <enum value="1">Visual Flight rules</enum>
+          <enum value="2">Not applicable</enum>
+          <enum value="3">Controlled Visual Flight Rules</enum>
+        </field>
+        <field octed="1" msb="4" lsb="3">
+          <name>RVSM</name>
+          <enum value="0">Unknown</enum>
+          <enum value="1">Approved</enum>
+          <enum value="2">Exempt</enum>
+          <enum value="3">Not Approved</enum>
+        </field>
+        <field octed="1" msb="2" lsb="2">
+          <name>HPR</name>
+          <enum value="0">Normal Priority Flight</enum>
+          <enum value="1">High Priority Flight</enum>
+        </field>
+        <field octed="2" msb="8" lsb="7">
+          <name>CDM</name>
+          <desc>Climbing/Descending mode</desc>
+          <enum value="0">Maintaining</enum>
+          <enum value="1">Climbing</enum>
+          <enum value="2">Descending</enum>
+          <enum value="3">Invalid</enum>
+        </field>
+        <field octed="2" msb="6" lsb="6">
+          <name>PRI</name>
+          <enum value="0">Non primary target</enum>
+          <enum value="1">Primary target</enum>
+        </field>
+        <field octed="2" msb="5" lsb="5">
+          <name>GV</name>
+          <enum value="0">Default</enum>
+          <enum value="1">Ground Vehicle</enum>
+        </field>
+        <field octed="2" msb="4" lsb="2">
+          <name>Spare</name>
+          <desc>Spare Bits set to zero</desc>
+          <mandatory value="0"/>
+        </field>
+      </subfield>
+      <subfield frn="8" format="fixed" length="6">
+        <name>Mode-S Identifier Aircraft 2</name>
+        <definition>Aircraft Identification downloaded from Aircraft 2 involved in the Conflict if equipped with a Mode-S transponder.</definition>
+        <field octed="1" msb="48" lsb="1">
+          <format>icao6str</format>
+          <desc>Characters 1-8 (coded on 6 bits each) defining aircraft identification when a flight plan is available or the
+          registration marking when no flight plan is available.Coding rules are provided in [4] Section 3.1.2.9
+        </desc>
+        </field>
+      </subfield>
+      <subfield frn="9" format="fixed" length="4">
+        <name>Flight Plan Number Aircraft 2</name>
+        <definition>Number of the Flight Plan Correlated to Aircraft 2 Involved in the Conflict</definition>
+        <field octed="2" msb="32" lsb="28">
+          <name>Spare</name>
+          <desc>Spare Bits set to zero</desc>
+          <mandatory value="0"/>
+        </field>
+        <field octed="1" msb="27" lsb="1">
+          <format>uint</format>
+          <name>NBR</name>
+          <desc>Number from 0 to 99 999 999</desc>
+        </field>
+      </subfield>
+      <subfield frn="10" format="fixed" length="2">
+        <name>Cleared Flight Level Aircraft 2</name>
+        <definition>Cleared Flight Level for Aircraft 2 Involved in the Conflict</definition>
+        <field octed="1" msb="16" lsb="1">
+          <format>uint</format>
+          <name>CFL</name>
+          <desc>Cleared Flight Level LSB = 1/4 FL</desc>
+        </field>
+      </subfield>
+    </dataitem>
+    <dataitem id="I004/RE" frn="20" format="explicit" length="1">
+      <name>Reserved Expansion Field</name>
+    </dataitem>
+    <dataitem id="I004/SP" frn="21" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>
+  </category>
+</asterix>

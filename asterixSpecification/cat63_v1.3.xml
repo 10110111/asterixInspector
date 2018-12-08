@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+
+<asterix>
+<!--
+  Part 10 : Category 63
+  Sensor Status Messages
+
+  Edition: 1.3
+  Edition Data: July 2007
+-->
+  <category cat="63" version="1.3">
+    <dataitem id="I063/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <definition>Identification of the SDPS sending the data</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I063/015" frn="2" format="fixed" length="1">
+      <name>Service Identification</name>
+      <definition>Identification of the service provided to one or more users.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Service Identification</name>
+      </field>
+      <desc><b>NOTE</b><br/>
+      The service identification is allocated by the SDPS<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I063/030" frn="3" format="fixed" length="3">
+      <name>Time of Message</name>
+      <definition>Absolute time stamping of the message, in the form of elapsed time since last midnight, expressed as UTC.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <name>Time Of Message</name>
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>1/128</scale>
+        <desc>(LSB) = (2^-7)s = 1/128 s</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+      The time of the day value is reset to zero at every midnight.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I063/050" frn="4" format="fixed" length="2">
+      <name>Sensor Identifier</name>
+      <definition>Identification of the Sensor to which the provided information are related.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I063/060" frn="5" format="variable" length="1">
+      <name>Sensor Configuration and Status</name>
+      <definition>Configuration and status of the sensor</definition>
+      <field octed="1" msb="8" lsb="7">
+        <name>CON</name>
+        <enum value="00b">operational</enum>
+        <enum value="01b">degraded</enum>
+        <enum value="10b">initialization</enum>
+        <enum value="11b">not currently connected</enum>
+      </field>
+      <field octed="1" msb="6" lsb="6">
+        <name>PSR</name>
+        <enum value="0b">PSR GO</enum>
+        <enum value="1b">PSR NOGO</enum>
+      </field>
+      <field octed="1" msb="5" lsb="5">
+        <name>SSR</name>
+        <enum value="0b">SSR GO</enum>
+        <enum value="1b">SSR NOGO</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>MDS</name>
+        <enum value="0b">Mode S GO</enum>
+        <enum value="1b">Mode S NOGO</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>ADS</name>
+        <enum value="0b">ADS GO</enum>
+        <enum value="1b">ADS NOGO</enum>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>MLT</name>
+        <enum value="0b">MLT GO</enum>
+        <enum value="1b">MLT NOGO</enum>
+      </field>
+      <field octed="2" msb="8" lsb="8">
+        <name>OPS</name>
+        <desc>Operational Release Status of the System</desc>
+        <enum value="0b">System is released for operational use</enum>
+        <enum value="1b">Operational use of System is inhibited</enum>
+      </field>
+      <field octed="2" msb="7" lsb="7">
+        <name>ODP</name>
+        <desc>Data Processor Overload Indicator</desc>
+        <enum value="0b">Default, no overload</enum>
+        <enum value="1b">Overload in DP</enum>
+      </field>
+      <field octed="2" msb="6" lsb="6">
+        <name>OXT</name>
+        <desc>Transmission Subsystem Overload Status</desc>
+        <enum value="0b">Default, no overload</enum>
+        <enum value="1b">Overload in transmission subsystem</enum>
+      </field>
+      <field octed="2" msb="5" lsb="5">
+        <name>MSC</name>
+        <desc>Monitoring System Connected Status</desc>
+        <enum value="0b">Monitoring system connected</enum>
+        <enum value="1b">Monitoring system disconnected</enum>
+      </field>
+      <field octed="2" msb="4" lsb="4">
+        <name>TSV</name>
+        <desc>Time Source Validity</desc>
+        <enum value="0b">valid</enum>
+        <enum value="1b">invalid</enum>
+      </field>
+      <field octed="2" msb="3" lsb="3">
+        <name>NPW</name>
+        <desc>No Plot Warning</desc>
+        <enum value="0b">Default (no meaning)</enum>
+        <enum value="1b">No plots being received</enum>
+      </field>
+      <field octed="2" msb="2" lsb="2">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <desc><b>NOTES</b><br/>
+  1. GO/NOGO information from PSR, SSR, Mode S, ADS and MLT is derived
+  from monosensor categories and has a meaning only for operational
+  sensors, whereas (CON) is derived by the SDPS.<br/>
+  2. The information (OPS), (ODP), (OXT), (MSC) and (TSV) are only related to
+  CNS/ATM Ground Station and are derived from monosensor category (ASTERIX Cat 023).<br/>
+  </desc>
+    </dataitem>
+    <dataitem id="I063/070" frn="6" format="fixed" length="2">
+      <name>Time Stamping Bias</name>
+      <definition>Plot Time stamping bias</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>TSB</name>
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>1/1000</scale>
+        <desc>(LSB) = 1ms</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I063/080" frn="7" format="fixed" length="4">
+      <name>SSR/Mode S Range Gain and Bias</name>
+      <definition>SSR/Mode S Range Gain and Range Bias, in two’s complement form.</definition>
+      <field octed="1" msb="32" lsb="17">
+        <name>SRG</name>
+        <format>int</format>
+        <scale>10^-5</scale>
+        <desc>SSR/Mode S Range Gain (LSB) = 10^-5</desc>
+      </field>
+      <field octed="1" msb="16" lsb="1">
+        <name>SRB</name>
+        <format>int</format>
+        <scale>1/128</scale>
+        <unit>nmi</unit>
+        <desc>SSR/Mode S Range Bias (LSB) = 1/128NM</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    The following formula is used to correct range:<br/>
+    ρ_corrected = (ρ_meassured - range_bias) / (1 + range_gain)<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I063/081" frn="8" format="fixed" length="2">
+      <name>SSR/Mode S Azimuth Bias</name>
+      <definition>SSR/Mode S Azimuth Bias, in two’s complement form.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>SAB</name>
+        <format>int</format>
+        <scale>360/2^16</scale>
+        <unit>deg</unit>
+        <desc>(LSB) = 360°/2^16 = 0.0055°</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    The following formula is used to correct azimuth:<br/>
+    θ_corrected = θ_measured − azimuth_bias<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I063/090" frn="9" format="fixed" length="4">
+      <name>PSR Range Gain and Bias</name>
+      <definition>PSR Range Gain and PSR Range Bias, in two’s complement form.</definition>
+      <field octed="1" msb="32" lsb="17">
+        <name>PRG</name>
+        <format>int</format>
+        <scale>10^-5</scale>
+        <desc>PSR Range Gain (LSB) = 10^-5</desc>
+      </field>
+      <field octed="1" msb="16" lsb="1">
+        <name>PRB</name>
+        <format>int</format>
+        <scale>1/128</scale>
+        <unit>nmi</unit>
+        <desc>PSR Range Bias (LSB) = 1/128NM</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    The following formula is used to correct range:<br/>
+    ρ_corrected = (ρ_meassured - range_bias) / (1 + range_gain)<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I063/091" frn="10" format="fixed" length="2">
+      <name>PSR Azimuth Bias</name>
+      <definition>PSR Azimuth Bias, in two’s complement form.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>PAB</name>
+        <format>int</format>
+        <scale>360/2^16</scale>
+        <unit>deg</unit>
+        <desc>(LSB) = 360°/2^16 = 0.0055°</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+    The following formula is used to correct azimuth:<br/>
+    θ_corrected = θ_measured − azimuth_bias<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I063/092" frn="11" format="fixed" length="2">
+      <name>PSR Elevation Bias</name>
+      <definition>PSR Elevation Bias, in two’s complement form.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>PEB</name>
+        <format>int</format>
+        <scale>360/2^16</scale>
+        <unit>deg</unit>
+        <desc>(LSB) = 360°/2^16 = 0.0055°</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I063/RE" frn="13" format="explicit" length="1">
+      <name>Reserved Expansion Field</name>
+    </dataitem>
+    <dataitem id="I063/SP" frn="14" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>
+  </category>
+</asterix>

@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+<asterix>
+  <!--
+  Part 2a
+  Transmission of
+  Monoradar Data
+  Target Reports
+
+  Edition: 1.1
+  Edition Date: August 2002
+
+
+  NOTE: Only UAP for tracks (not plots) is implemented
+
+-->
+  <category cat="1" version="1.1">
+    <dataitem id="I001/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <definition>Identification of the radar station from which the data are received.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. The defined SACs are listed in Part 1, Table 2 [Ref. 2]<br/>
+      2. The defined SICs are listed in Part 1, Annex B [Ref. 2]<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/020" frn="2" format="variable" length="1">
+      <name>Target Report Descriptor</name>
+      <definition>Type and characteristics of the radar data as transmitted by a radar station.</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>TYP</name>
+        <enum value="0">Plot</enum>
+        <enum value="1">Track</enum>
+      </field>
+      <field octed="1" msb="7" lsb="7">
+        <name>SIM</name>
+        <desc>used to identify a simulated target report as produced by a traffic simulator.</desc>
+        <enum value="0">Actual plot or track</enum>
+        <enum value="1">Simulated plot or track</enum>
+      </field>
+      <field octed="1" msb="6" lsb="5">
+        <name>SSR/PSR</name>
+        <desc>Radar detection in last antenna scan</desc>
+        <enum value="0">No detection</enum>
+        <enum value="1">Sole primary detection</enum>
+        <enum value="2">Sole secondary detection</enum>
+        <enum value="3">Combined primary and secondary detection</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>ANT</name>
+        <enum value="0">Target report from antenna 1</enum>
+        <enum value="1">Target report from antenna 2</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>SPI</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Special Position Identification</enum>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>RAB</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Plot or track from a fixed transponder</enum>
+      </field>
+      <field octed="2" msb="8" lsb="8">
+        <name>TST</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Test target indicator</enum>
+      </field>
+      <field octed="2" msb="7" lsb="6">
+        <name>DS1/DS2</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Unlawful interference (code 7500)</enum>
+        <enum value="2">Radio-communication failure (code 7600)</enum>
+        <enum value="3">Emergency (code 7700)</enum>
+      </field>
+      <field octed="2" msb="5" lsb="5">
+        <name>ME</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Military emergency</enum>
+      </field>
+      <field octed="2" msb="4" lsb="4">
+        <name>ME</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Military identification</enum>
+      </field>
+      <field octed="2" msb="3" lsb="2">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+    </dataitem>
+    <dataitem id="I001/030" frn="19" format="variable" length="1">
+      <name>Warning/Error Conditions</name>
+      <definition>Warning/error conditions detected by a radar station for the target report involved.</definition>
+      <field octed="1" msb="8" lsb="2">
+        <name>W/E Value</name>
+        <enum value="0">no warning nor error condition</enum>
+        <enum value="1">garbled reply</enum>
+        <enum value="2">reflection</enum>
+        <enum value="3">sidelobe reply</enum>
+        <enum value="4">split plot</enum>
+        <enum value="5">second time around reply</enum>
+        <enum value="6">angels</enum>
+        <enum value="7">terrestrial vehicles</enum>
+        <enum value="64">possible wrong code in Mode-3/A</enum>
+        <enum value="65">possible wrong altitude information, transmitted when the Code C credibility check fails together with the Mode-C code in binary notation</enum>
+        <enum value="66">possible phantom MSSR plot</enum>
+        <enum value="80">fixed PSR plot</enum>
+        <enum value="81">slow PSR plot</enum>
+        <enum value="82">low quality PSR plot</enum>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. Warning/error condition values 0-63 are reserved for common standard use, whereas the values 64-127 are application dependent.<br/>
+    2. The following set of common W/E values is defined:<br/>
+      -  W/E = 0, no warning nor error condition<br/>
+      -  W/E = 1, garbled reply<br/>
+      -  W/E = 2, reflection<br/>
+      -  W/E = 3, sidelobe reply;<br/>
+      -  W/E = 4, split plot;<br/>
+      -  W/E = 5, second time around reply;<br/>
+      -  W/E = 6, angels<br/>
+      -  W/E = 7, terrestrial vehicles.<br/>
+    3. The following set of applications dependent W/E values are reserved:<br/>
+      -  W/E = 64, possible wrong code in Mode-3/A;<br/>
+      -  W/E = 65, possible wrong altitude information, transmitted when the Code C credibility check fails together with the Mode-C code in binary notation;<br/>
+      -  W/E = 66 possible phantom MSSR plot;<br/>
+      -  W/E = 80 fixed PSR plot;<br/>
+      -  W/E = 81 slow PSR plot;<br/>
+      -  W/E = 82 low quality PSR plot.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/040" frn="4" format="fixed" length="4">
+      <name>Measured Position in Polar Co-ordinates</name>
+      <description>Measured position of an aircraft in local polar co-ordinates.</description>
+      <field size="4" octed="1" msb="32" lsb="17">
+        <name>RHO</name>
+        <format>uint</format>
+        <unit>nmi</unit>
+        <scale>1/128</scale>
+        <desc>1/128 NM. Max. range = 512 NM</desc>
+      </field>
+      <field size="4" octed="1" msb="16" lsb="1">
+        <name>Theta</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/2^16</scale>
+        <desc>360°/(2^16), approx. 0.0055°</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    When expressed in 16 bits, signed or unsigned azimuths have the same value.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/042" frn="5" format="fixed" length="4">
+      <name>Position in Cartesian Co-ordinates</name>
+      <definition>Position of a target in Cartesian co-ordinates, in two’s complement form.</definition>
+      <field size="4" octed="1" msb="32" lsb="17">
+        <name>X-Component</name>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+        <desc>2^(-6+f) where f is the scaling factor applied, modifying the standard quantisation unit. Max. range = 2^(9+f) NM</desc>
+      </field>
+      <field size="4" octed="1" msb="16" lsb="1">
+        <name>Y-Component</name>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+        <desc>2^(-6+f) Max. range = 2^(9+f) NM</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. A default quantisation unit of 1/64 NM is obtained for a value of f = 0.<br/>
+    2. Negative values are expressed in 2's complement form, bit-32 and bit-16 shall be set to 0 for positive values and 1 for negative values.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/050" frn="15" format="fixed" length="2">
+      <name>Mode-2 Code in Octal Representation</name>
+      <definition>Reply to Mode-2 interrogation.</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>V</name>
+        <enum value="0">Code validated</enum>
+        <enum value="1">Code not validated</enum>
+      </field>
+      <field octed="1" msb="15" lsb="15">
+        <name>G</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Garbled code</enum>
+      </field>
+      <field octed="1" msb="14" lsb="14">
+        <name>L</name>
+        <enum value="0">Mode-2 code as derived from the reply of the transponder</enum>
+        <enum value="1">Smoothed Mode-2 code as provided by a local tracker</enum>
+      </field>
+      <field octed="1" msb="13" lsb="13">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0">
+      </mandatory>
+      </field>
+      <field octed="1" msb="12" lsb="1">
+        <name>Reply</name>
+        <format>octal</format>
+        <desc>Mode-2 code in octal representation</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. Smoothed Mode-2 data (bit-14 set to one) is used when the plot
+       contains no Mode-2 code or the Mode-2 codes of the plot and track are different.<br/>
+    2. Bits-16/15 have no meaning in the case of a smoothed Mode-2 and are
+       set to 0 for a calculated track.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/060" frn="18" format="fixed" length="2">
+      <name>Mode-2 Code Confidence Indicator</name>
+      <definition>Confidence level for each bit of a Mode-2 reply as provided by a monopulse SSR station.</definition>
+      <field octed="1" msb="16" lsb="13">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0">
+      </mandatory>
+      </field>
+      <field octed="1" msb="12" lsb="1">
+        <name>QXi</name>
+        <desc>= 0 High quality pulse Xi<br/>
+      = 1 Low quality pulse Xi</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      This Data Item is only transmitted if at least one pulse is of low quality.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/070" frn="7" format="fixed" length="2">
+      <name>Mode-3/A Code in Octal Representation</name>
+      <definition>Mode-3/A code converted into octal representation.</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>V</name>
+        <enum value="0">Code validated</enum>
+        <enum value="1">Code not validated</enum>
+      </field>
+      <field octed="1" msb="15" lsb="15">
+        <name>G</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Garbled Mode</enum>
+      </field>
+      <field octed="1" msb="14" lsb="14">
+        <name>L</name>
+        <enum value="0">Mode-3/A code derived from the reply of the transponder</enum>
+        <enum value="1">Mode-3/A code not extracted during the last scan</enum>
+      </field>
+      <field octed="1" msb="13" lsb="13">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0">
+      </mandatory>
+      </field>
+      <field octed="1" msb="12" lsb="1">
+        <name>Reply</name>
+        <format>octal</format>
+        <desc>Mode-3/A reply in octal representation</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. The detector signals a garbled code when at least two replies are
+       overlapping. Smoothed Mode-3/A data (bit-14 set to a one) are used in
+       the case of the absence of Mode-3/A code information in the plot, or in
+       the case of a difference between the plot and track Mode-3/A code
+       information.<br/>
+    2. Bits-16/15 have no meaning in the case of a smoothed Mode-3/A and are set to 0 for a calculated track.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/080" frn="16" format="fixed" length="2">
+      <name>Mode-3/A Code Confidence Indicator</name>
+      <definition>Confidence level for each bit of a Mode-3/A reply as provided by a monopulse SSR station.</definition>
+      <field octed="1" msb="16" lsb="13">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="12" lsb="1">
+        <name>QXi</name>
+        <desc>= 0 High quality pulse Xi<br/>
+      = 1 Low quality pulse Xi</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      This Data Item is only transmitted if at least one pulse is of low quality.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/090" frn="8" format="fixed" length="2">
+      <name>Mode-C Code in Binary Representation</name>
+      <definition>Mode-C height converted into binary representation.</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>V</name>
+        <enum value="0">Code validated</enum>
+        <enum value="1">Code not validated</enum>
+      </field>
+      <field octed="1" msb="15" lsb="15">
+        <name>G</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Garbled Mode</enum>
+      </field>
+      <field octed="1" msb="14" lsb="1">
+        <name>Flight Level</name>
+        <desc>LSB= 1/4 FL = 25ft</desc>
+        <format>uint</format>
+        <unit>FL</unit>
+        <scale>1/4</scale>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. The detector signals a garbled code when at least two replies are overlapping.<br/>
+    2. The maximum height which can be represented is 204 775 ft.
+       Practically the maximum valid value is 126 750 ft (refer to ICAO Annex 10).<br/>
+    3. Negative values are expressed in 2's complement form, bit-14 is set to 0
+       for positive values and 1 for negative values.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/100" frn="17" format="fixed" length="4">
+      <name>Mode-C Code and Code Confidence Indicator</name>
+      <definition>Mode-C height in Gray notation as received from the transponder together with the confidence level for each reply bit as provided by a  monopulse SSR station.</definition>
+      <field octed="1" msb="32" lsb="32">
+        <name>V</name>
+        <enum value="0">Code validated</enum>
+        <enum value="1">Code not validated</enum>
+      </field>
+      <field octed="1" msb="31" lsb="31">
+        <name>G</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Garbled code</enum>
+      </field>
+      <field octed="1" msb="30" lsb="29">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="28" lsb="17">
+        <name>Reply</name>
+        <desc>Mode-C reply in Gray notation</desc>
+      </field>
+      <field octed="1" msb="16" lsb="13">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="12" lsb="1">
+        <name>QXi</name>
+        <desc>= 0 High quality pulse Xi<br/>
+      = 1 Low quality pulse Xi
+      </desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. This Data Item is only transmitted if at least one pulse is of low quality.<br/>
+    2. The detector signals a garbled code when at least two replies are overlapping.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/120" frn="12" format="fixed" length="1">
+      <name>Measured Radial Doppler Speed</name>
+      <definition>Radial component of the ground speed as measured by means of Doppler filter banks in radar signal processors.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <format>int</format>
+        <desc>(LSB) = 2^(-14+f) NM/s.</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-14</scale>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. A default quantisation unit of 14.062 5 kt and a maximum of +/- 1 800 kt is obtained for a value of f = 6.<br/>
+    2. Negative values are expressed in 2's complement form, bit-8 is set to 0 for positive values and 1 for negative values.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/130" frn="10" format="variable" length="1">
+      <name>Radar Plot Characteristics</name>
+      <definition>Additional information on the quality of the target report.</definition>
+      <field octed="1" msb="8" lsb="2">
+        <format>hex</format>
+        <desc>Indicator. The actual meaning of the bits is application dependent.</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    This Data Item may contain parameters such as plot runlength
+    (primary and secondary), difference between primary and
+      secondary derived azimuth, pulse amplitude, etc.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/131" frn="11" format="fixed" length="1">
+      <name>Received Power</name>
+      <definition>Measurement of the received power.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <format>int</format>
+        <unit>dBm</unit>
+        <scale>1</scale>
+        <desc>Decimal logarithm of the power received in dBm. POWER = 0 for 0 dBm<br/>
+      (LSB) = 1 dBm
+      </desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1.POWER is the measured value of the power received on the sum pattern for a plot.<br/>
+    2.Negative values are expressed in 2's complement form, bit-8 is set to 0 for positive values and 1 for negative values.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/141" frn="9" format="fixed" length="2">
+      <name>Truncated Time of Day</name>
+      <definition>Absolute time stamping expressed as Coordinated Universal Time (UTC) time.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <format>uint</format>
+        <desc>(2^-7) s = 1/128s</desc>
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>1/128</scale>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. The exchange of this Data Item allows the easy derivation of the correct
+       UTC time value, provided that the clocks at the data source and sink(s)
+       are less than 512 seconds out of synchronisation. Special care has to
+         be taken at the transition of an "all ones" value to an "all zeros" value (every 512 seconds).<br/>
+    2. The time of day value is reset to 0 each day at midnight.<br/>
+    3. For time management in radar transmission applications, refer to Part 1, paragraph 5.4 [Ref. 2].<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/150" frn="22" format="fixed" length="1">
+      <name>Presence of X-Pulse</name>
+      <definition>Presence of the X-Pulse for the various modes applied in the interrogation interlace pattern.</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>XA</name>
+        <enum value="0">Default</enum>
+        <enum value="1">X-pulse received in Mode-3/A reply</enum>
+      </field>
+      <field octed="1" msb="7" lsb="7">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="6" lsb="6">
+        <name>XC</name>
+        <enum value="0">Default</enum>
+        <enum value="1">X-pulse received in Mode-C reply</enum>
+      </field>
+      <field octed="1" msb="5" lsb="4">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>X2</name>
+        <enum value="0">Default</enum>
+        <enum value="1">X-pulse received in Mode-2 reply</enum>
+      </field>
+      <field octed="1" msb="2" lsb="1">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <desc><b>NOTES</b><br/>
+    This Data Item is transmitted only if at least one X-pulse has been
+      received in a Mode-A, Mode-2 or Mode-C reply.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/161" frn="3" format="fixed" length="2">
+      <name>Track Plot Number</name>
+      <definition>An integer value representing a unique reference to a track/plot record within a particular track/plot file.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <format>uint</format>
+        <name>Track/Plot Number</name>
+      </field>
+      <desc><b>NOTES</b><br/>
+    The differentiation between track and plot number is either implicit
+    or is made via the Target Report Descriptor (Data Item I001/020).<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/170" frn="13" format="variable" length="1">
+      <name>Track Status</name>
+      <definition>Status of track derived either from primary and/or secondary radar information.</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>CON</name>
+        <enum value="0">Confirmed Track</enum>
+        <enum value="1">Track in initialisation phase</enum>
+      </field>
+      <field octed="1" msb="7" lsb="7">
+        <name>RAD</name>
+        <enum value="0">Primary Track</enum>
+        <enum value="1">SSR/Combined track</enum>
+      </field>
+      <field octed="1" msb="6" lsb="6">
+        <name>MAN</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Aircraft manoeuvring</enum>
+      </field>
+      <field octed="1" msb="5" lsb="5">
+        <name>DOU</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Doubtful plot to track association</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>RDPC</name>
+        <desc>Radar Data Processing Chain, used to signal the discontinuity of the track numbers.</desc>
+        <enum value="0">RDP Chain 1</enum>
+        <enum value="1">RDP Chain 2</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>GHO</name>
+        <desc>used to signal that the track is suspected to have been generated by a fake target.</desc>
+        <enum value="0">Default</enum>
+        <enum value="1">Ghost track</enum>
+      </field>
+      <field octed="2" msb="8" lsb="8">
+        <name>TRE</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Last report for a track</enum>
+      </field>
+      <field octed="2" msb="7" lsb="2">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+    </dataitem>
+    <dataitem id="I001/200" frn="6" format="fixed" length="4">
+      <name>Calculated Track Velocity in Polar Co-ordinates</name>
+      <definition>Calculated track velocity expressed in polar co-ordinates.</definition>
+      <field octed="1" msb="32" lsb="17">
+        <name>Ground Speed</name>
+        <format>uint</format>
+        <unit>nmi/s</unit>
+        <scale>2^-14</scale>
+        <desc>(LSB) = 2^-14 NM/s ≅ 0.22 kt Max. val. = 2 NM/s = 7200kt</desc>
+      </field>
+      <field octed="1" msb="16" lsb="1">
+        <name>Heading</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/(2^16)</scale>
+        <desc>(LSB) = 360° / 2^16 = 0.0055°</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I001/210" frn="14" format="variable" length="1">
+      <name>Track Quality</name>
+      <definition>Relative track quality</definition>
+      <field octed="1" msb="8" lsb="2">
+        <format>uint</format>
+        <name>Quality indicator</name>
+      </field>
+      <desc><b>NOTES</b><br/>
+    Actual bit signification is application dependent.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I001/SP" frn="20" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>
+  </category>
+</asterix>

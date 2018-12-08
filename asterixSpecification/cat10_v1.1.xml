@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+
+<asterix>
+
+<!--
+    Part 7 : Category 10
+    Transmission of Monosensor
+    Surface Movement Data
+
+    Edition: 1.1
+    Edition Date: March 2007
+-->
+  <category cat="10" version="1.1">
+    <dataitem id="I010/000" frn="2" format="fixed" length="1">
+      <name>Message Type</name>
+      <definition>This Data Item allows for a more convenient handling of the messages at the receiver side by further defining the type of transaction.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Message Type</name>
+        <enum value="1">Target Report</enum>
+        <enum value="2">Start of Update Cycle</enum>
+        <enum value="3">Periodic Status Message</enum>
+        <enum value="4">Event-triggered Status Message</enum>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. In application where transactions of various types are exchanged, the Message Type Data Item facilitates the proper message handling at the receiver side.<br/>
+    2. All Message Type values are reserved for common standard use.<br/>
+    3.The following set of Message Types are standardised for category 010 records:<br/>
+    • 001 Target Report<br/>
+    • 002 Start of Update Cycle<br/>
+    • 003 Periodic Status Message<br/>
+    • 004 Event-triggered Status Message<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I010/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <definition>Identification of the system from which the data are received.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code fixed to zero</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+      The SAC is fixed to zero to indicate a data flow local to the airport.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I010/020" frn="3" format="variable" length="1">
+      <name>Target Report Descriptor</name>
+      <definition>Type and characteristics of the data as transmitted by a system.</definition>
+      <field octed="1" msb="8" lsb="6">
+        <name>TYP</name>
+        <enum value="000b">SSR multilateration</enum>
+        <enum value="001b">Mode S multilateration</enum>
+        <enum value="010b">ADS-B</enum>
+        <enum value="011b">PSR</enum>
+        <enum value="100b">Magnetic Loop System</enum>
+        <enum value="101b">HF multilateration</enum>
+        <enum value="110b">Not defined</enum>
+        <enum value="111b">Other types</enum>
+      </field>
+      <field octed="1" msb="5" lsb="5">
+        <name>DRC</name>
+        <enum value="0">No differential correction</enum>
+        <enum value="1">Differential correction</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>CHN</name>
+        <enum value="0">Chain 1</enum>
+        <enum value="1">Chain 2</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>GBS</name>
+        <enum value="0">Transponder Ground bit not set</enum>
+        <enum value="1">Transponder Ground bit set</enum>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>CRT</name>
+        <enum value="0">No Corrupted reply in multilateration</enum>
+        <enum value="1">Corrupted reply in multilateration</enum>
+      </field>
+      <field octed="2" msb="8" lsb="8">
+        <name>SIM</name>
+        <enum value="0">Actual Target Report</enum>
+        <enum value="1">Simulated Target Report</enum>
+      </field>
+      <field octed="2" msb="7" lsb="7">
+        <name>TST</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Test Target</enum>
+      </field>
+      <field octed="2" msb="6" lsb="6">
+        <name>RAB</name>
+        <enum value="0">Report from target transponder</enum>
+        <enum value="1">Report from field monitor (fixed transponder)</enum>
+      </field>
+      <field octed="2" msb="5" lsb="4">
+        <name>LOP</name>
+        <enum value="00b">Undetermined</enum>
+        <enum value="01b">Loop start</enum>
+        <enum value="10b">Loop finish</enum>
+      </field>
+      <field octed="2" msb="3" lsb="2">
+        <name>TOT</name>
+        <enum value="00b">Undetermined</enum>
+        <enum value="01b">Aircraft</enum>
+        <enum value="10b">Ground vehicle</enum>
+        <enum value="11b">Helicopter</enum>
+      </field>
+      <field octed="3" msb="8" lsb="8">
+        <name>SPI</name>
+        <enum value="0">Absence of SPI</enum>
+        <enum value="1">Special Position Indication</enum>
+      </field>
+      <field octed="3" msb="7" lsb="2">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+    </dataitem>
+    <dataitem id="I010/040" frn="6" format="fixed" length="4">
+      <name>Measured Position in Polar Co-ordinates</name>
+      <description>Measured position of a target in local polar co-ordinates.</description>
+      <field size="4" octed="1" msb="32" lsb="17">
+        <name>RHO</name>
+        <format>uint</format>
+        <unit>m</unit>
+        <scale>1</scale>
+        <desc>1m, max.range = 65536m, approx. 35.4NM</desc>
+      </field>
+      <field size="4" octed="1" msb="16" lsb="1">
+        <name>Theta</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/2^16</scale>
+        <desc>360°/(2^16), approx. 0.0055°</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/041" frn="5" format="fixed" length="8">
+      <name>Position in WGS-84 Co-ordinates</name>
+      <description>Position of a target in WGS-84 Co-ordinates.</description>
+      <field octed="1" msb="64" lsb="33">
+        <name>Latitude</name>
+        <format>int</format>
+        <unit>deg</unit>
+        <scale>180/2^31</scale>
+        <desc>In WGS.84 in two’s complement. Range -90 ≤ latitude ≤ 90 deg. LSB = 180/2^31 degrees</desc>
+      </field>
+      <field octed="1" msb="32" lsb="1">
+        <name>Longitude</name>
+        <format>int</format>
+        <unit>deg</unit>
+        <scale>180/2^31</scale>
+        <desc>In WGS.84 in two’s complement. Range -180 ≤ longitude &lt; 180 deg. = 180/231 degrees</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/042" frn="7" format="fixed" length="4">
+      <name>Position in Cartesian Co-ordinates</name>
+      <definition>Position of a target in Cartesian co-ordinates, in two’s complement form.</definition>
+      <field size="4" octed="1" msb="32" lsb="17">
+        <name>X-Component</name>
+        <format>int</format>
+        <unit>m</unit>
+        <scale>1</scale>
+        <desc>7 (LSB) = 1m, max.range = ±32768m, approx.±17.7NM</desc>
+      </field>
+      <field size="4" octed="1" msb="16" lsb="1">
+        <name>Y-Component</name>
+        <format>int</format>
+        <unit>m</unit>
+        <scale>1</scale>
+        <desc>bit-1 (LSB) = 1m, max.range = ±32768m, approx.±17.7NM</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/060" frn="12" format="fixed" length="2">
+      <name>Mode-3/A Code in Octal Representation</name>
+      <definition>Mode-3/A code converted into octal representation.</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>V</name>
+        <enum value="0">Code validated</enum>
+        <enum value="1">Code not validated</enum>
+      </field>
+      <field octed="1" msb="15" lsb="15">
+        <name>G</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Garbled Mode</enum>
+      </field>
+      <field octed="1" msb="14" lsb="14">
+        <name>L</name>
+        <enum value="0">Mode-3/A code derived from the reply of the transponder</enum>
+        <enum value="1">Mode-3/A code not extracted during the last scan</enum>
+      </field>
+      <field octed="1" msb="13" lsb="13">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="12" lsb="1">
+        <name>Reply</name>
+        <format>octal</format>
+        <desc>Mode-3/A reply in octal representation</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. Bit 15 has no meaning in the case of a smoothed Mode-3/A code and is set
+    to 0 for a calculated track. For Mode S, it is set to one when an error
+      correction has been attempted.<br/>
+    2. For Mode S, bit 16 is normally set to zero, but can exceptionally be set to
+    one to indicate a non-validated Mode-3/A code (e.g. alert condition
+      detected, but new Mode-3/A code not successfully extracted).<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I010/090" frn="17" format="fixed" length="2">
+      <name>Flight Level in Binary Representation</name>
+      <definition>Flight Level (Mode C / Mode S Altitude) converted into binary two's complement representation.</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>V</name>
+        <enum value="0">Code validated</enum>
+        <enum value="1">Code not validated</enum>
+      </field>
+      <field octed="1" msb="15" lsb="15">
+        <name>G</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Garbled Mode</enum>
+      </field>
+      <field octed="1" msb="14" lsb="1">
+        <name>Flight Level</name>
+        <desc>LSB= 1/4 FL</desc>
+        <format>int</format>
+        <unit>FL</unit>
+        <scale>1/4</scale>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. The value shall be within the range described by ICAO Annex 10<br/>
+    2. For Mode S, bit 15 (G) is set to one when an error correction has been attempted.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I010/091" frn="18" format="fixed" length="2">
+      <name>Meassured Height</name>
+      <definition>Height above local 2D co-ordinate reference system (two's complement) based on direct measurements not related to barometric pressure.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>Meassured Height</name>
+        <format>int</format>
+        <unit>ft</unit>
+        <scale>6.25</scale>
+        <desc>Height LSB= 6.25 ft Range= +/- 204 800 ft</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/131" frn="24" format="fixed" length="1">
+      <name>Amplitude of Primary Plot</name>
+      <definition>Amplitude of Primary Plot</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>PAM</name>
+        <format>uint</format>
+        <desc>The value is radar-dependent, 0 being the minimum detectable level for that radar.</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/140" frn="4" format="fixed" length="3">
+      <name>Time of Day</name>
+      <definition>Absolute time stamping expressed as UTC.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>uint</format>
+        <name>Time of Day</name>
+        <unit>s</unit>
+        <scale>1/128</scale>
+        <desc>(LSB) = (2^-7)s = 1/128 s</desc>
+      </field>
+      <desc><b>NOTE</b><br/>The time of day value is reset to zero each day at midnight.<br/></desc>
+    </dataitem>
+    <dataitem id="I010/161" frn="10" format="fixed" length="2">
+      <name>Track Number</name>
+      <definition>An integer value representing a unique reference to a track record within a particular track file.</definition>
+      <field octed="1" msb="16" lsb="13">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="13" lsb="1">
+        <format>uint</format>
+        <desc>Track number</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/170" frn="11" format="variable" length="1">
+      <name>Track Status</name>
+      <definition>Status of track.</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>CNF</name>
+        <enum value="0">Confirmed Track</enum>
+        <enum value="1">Track in initialisation phase</enum>
+      </field>
+      <field octed="1" msb="7" lsb="7">
+        <name>TRE</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Last report for a track</enum>
+      </field>
+      <field octed="1" msb="6" lsb="5">
+        <name>CST</name>
+        <enum value="00b">No extrapolation</enum>
+        <enum value="01b">Predictable extrapolation due to sensor refresh period (see NOTE)</enum>
+        <enum value="10b">Predictable extrapolation in masked area</enum>
+        <enum value="11b">Extrapolation due to unpredictable absence of detection</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>MAH</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Horizontal manoeuvre</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>TCC</name>
+        <enum value="0">Tracking performed in 'Sensor Plane', i.e. neither slant range correction nor projection was applied.</enum>
+        <enum value="1">Slant range correction and a suitable projection technique are used to track in a 2D.reference plane, tangential to the earth model at the Sensor Site co-ordinates.</enum>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>STH</name>
+        <enum value="0">Measured position</enum>
+        <enum value="1">Smoothed position</enum>
+      </field>
+      <field octed="2" msb="8" lsb="7">
+        <name>TOM</name>
+        <enum value="00b">Unknown type of movement</enum>
+        <enum value="01b">Taking-off</enum>
+        <enum value="10b">Landing</enum>
+        <enum value="11b">Other types of movement</enum>
+      </field>
+      <field octed="2" msb="6" lsb="4">
+        <name>DOU</name>
+        <enum value="000b">No doubt</enum>
+        <enum value="001b">Doubtful correlation (undetermined reason)</enum>
+        <enum value="010b">Doubtful correlation in clutter</enum>
+        <enum value="011b">Loss of accuracy</enum>
+        <enum value="100b">Loss of accuracy in clutter</enum>
+        <enum value="101b">Unstable track</enum>
+        <enum value="110b">Previously coasted</enum>
+      </field>
+      <field octed="2" msb="3" lsb="2">
+        <name>MSR</name>
+        <enum value="00b">Merge or split indication undetermined</enum>
+        <enum value="01b">Track merged by association to plot</enum>
+        <enum value="10b">Track merged by non-association to plot</enum>
+        <enum value="11b">Split track</enum>
+      </field>
+      <field octed="3" msb="8" lsb="8">
+        <name>GHO</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Ghost track</enum>
+      </field>
+      <field octed="3" msb="7" lsb="2">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. Some sensors are not be able to scan the whole coverage in one refresh period. Therefore, track extrapolation is performed in un-scanned sectors. CST is then set to 01.<br/>
+    2. Bit-8 (GHO) is used to signal that the track is suspected to have been generated by a fake target.<br/>
+    </desc>
+    </dataitem>
+    <dataitem id="I010/200" frn="8" format="fixed" length="4">
+      <name>Calculated Track Velocity in Polar Co-ordinates</name>
+      <definition>Calculated track velocity expressed in polar co-ordinates.</definition>
+      <field octed="1" msb="32" lsb="17">
+        <name>Ground Speed</name>
+        <format>uint</format>
+        <unit>kn</unit>
+        <scale>3600*2^-14</scale>
+        <desc>(LSB) = 2^-14 NM/s ≅ 0.22 kt Max. val. = 2 NM/s = 7200kt</desc>
+      </field>
+      <field octed="1" msb="16" lsb="1">
+        <name>Track Angle</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/2^16</scale>
+        <desc>(LSB) = 360° / 2^16 = 0.0055°</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/202" frn="9" format="fixed" length="4">
+      <name>Calculated Track Velocity in Cartesian Coord.</name>
+      <definition>Calculated track velocity expressed in Cartesian co-ordinates, in two’s complement representation.</definition>
+      <field octed="1" msb="32" lsb="17">
+        <name>Vx</name>
+        <format>int</format>
+        <unit>m/s</unit>
+        <scale>0.25</scale>
+      </field>
+      <field octed="1" msb="16" lsb="1">
+        <name>Vy</name>
+        <format>int</format>
+        <unit>m/s</unit>
+        <scale>0.25</scale>
+        <desc> (LSB) = 0.25 m/s, Max.range = ±8192m/s</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/210" frn="25" format="fixed" length="2">
+      <name>Calculated Acceleration</name>
+      <definition>Calculated Acceleration of the target, in two’s complement form.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <format>int</format>
+        <unit>m/s^2</unit>
+        <scale>0.25</scale>
+        <name>Ax</name>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <format>int</format>
+        <unit>m/s^2</unit>
+        <scale>0.25</scale>
+        <name>Ay</name>
+        <desc>(LSB) = Max. range ± 31 m/s^2 0.25 m/s^2</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/220" frn="13" format="fixed" length="3">
+      <name>Target Address</name>
+      <definition>Target address (24-bits address) assigned uniquely to each Target.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>hex</format>
+        <name>Target Address</name>
+        <desc>24-bits Target Address, A23 to A0</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/245" frn="14" format="fixed" length="7">
+      <name>Target identification</name>
+      <definition>Target (aircraft or vehicle) identification in 8 characters.</definition>
+      <field octed="1" msb="56" lsb="55">
+        <format>hex</format>
+        <name>STI</name>
+        <enum value="00b">Callsign or registration downlinked from transponder</enum>
+        <enum value="01b">Callsign not downlinked from transponder</enum>
+        <enum value="10b">Registration not downlinked from transponder</enum>
+      </field>
+      <field octed="1" msb="54" lsb="49">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="48" lsb="1">
+        <format>icao6str</format>
+        <desc>Characters 1-8 (coded on 6 bits each) defining target identification.</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/250" frn="15" format="repetive" length="8">
+      <name>Mode S MB Data</name>
+      <definition>Mode S Comm B data as extracted from the aircraft transponder.</definition>
+      <field octed="1" msb="64" lsb="9">
+        <format>hex</format>
+        <name>MB Data</name>
+        <desc>56-bit message conveying Mode S Comm B message data</desc>
+      </field>
+      <field octed="1" msb="8" lsb="5">
+        <name>BDS1</name>
+        <desc>Comm B Data Buffer Store 1 Address</desc>
+      </field>
+      <field octed="1" msb="4" lsb="1">
+        <name>BDS2</name>
+        <desc>Comm B Data Buffer Store 2 Address</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    1. For the transmission of BDS20, item 245 is used.
+    </desc>
+    </dataitem>
+    <dataitem id="I010/270" frn="19" format="variable" length="1">
+      <name>Target Size and Orientation</name>
+      <definition>Target size defined as length and width of the detected target, and orientation.</definition>
+      <field octed="1" msb="8" lsb="2">
+        <name>LENGTH</name>
+        <format>uint</format>
+        <unit>m</unit>
+        <scale>1</scale>
+        <desc>(LSB) = 1m</desc>
+      </field>
+      <field octed="2" msb="8" lsb="2">
+        <name>ORIENTATION</name>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/128</scale>
+        <desc>(LSB) = 360° / 128 = approx. 2.81°</desc>
+      </field>
+      <field octed="3" msb="8" lsb="2">
+        <name>WIDTH</name>
+        <format>uint</format>
+        <unit>m</unit>
+        <scale>1</scale>
+        <desc>(LSB) = 1m</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+    The orientation gives the direction which the aircraft nose is pointing, relative to the Geographical North.
+    </desc>
+    </dataitem>
+    <dataitem id="I010/280" frn="23" format="repetive" length="2">
+      <name>Presence</name>
+      <definition>Positions of all elementary presences constituting a plot.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <format>int</format>
+        <name>DRHO</name>
+        <unit>m</unit>
+        <scale>1</scale>
+        <desc>Difference between the radial distance of the plot centre and that of the presence. LSB = 1m  Max. Range = ± 127m</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>DTHETA</name>
+        <format>int</format>
+        <unit>deg</unit>
+        <scale>0.15</scale>
+        <desc>Difference between the azimuth of the plot centre and that of the presence. LSB = 0.15° Max. Range = ± 19.05°</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/300" frn="16" format="fixed" length="1">
+      <name>Vehicle Fleet Identification</name>
+      <definition>Vehicle fleet identification number.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>VFI</name>
+        <enum value="0">Unknown</enum>
+        <enum value="1">ATC equipment maintenance</enum>
+        <enum value="2">Airport maintenance</enum>
+        <enum value="3">Fire</enum>
+        <enum value="4">Bird scarer</enum>
+        <enum value="5">Snow plough</enum>
+        <enum value="6">Runway sweeper</enum>
+        <enum value="7">Emergency</enum>
+        <enum value="8">Police</enum>
+        <enum value="9">Bus</enum>
+        <enum value="10">Tug (push/tow)</enum>
+        <enum value="11">Grass cutter</enum>
+        <enum value="12">Fuel</enum>
+        <enum value="13">Baggage</enum>
+        <enum value="14">Catering</enum>
+        <enum value="15">Aircraft maintenance</enum>
+        <enum value="16">Flyco (follow me)</enum>
+      </field>
+    </dataitem>
+    <dataitem id="I010/310" frn="21" format="fixed" length="1">
+      <name>Pre-programmed Message</name>
+      <definition>Number related to a pre-programmed message that can be transmitted by a vehicle.</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>TRB</name>
+        <enum value="0">Default</enum>
+        <enum value="1">In Trouble</enum>
+      </field>
+      <field octed="1" msb="7" lsb="1">
+        <name>MSG</name>
+        <enum value="1">Towing aircraft</enum>
+        <enum value="2">“Follow me” operation</enum>
+        <enum value="3">Runway check</enum>
+        <enum value="4">Emergency operation (fire, medical…)</enum>
+        <enum value="5">Work in progress (maintenance, birds scarer, sweepers…)</enum>
+      </field>
+    </dataitem>
+    <dataitem id="I010/500" frn="22" format="fixed" length="4">
+      <name>Standard Deviation of Position</name>
+      <definition>Standard Deviation of Position</definition>
+      <field octed="1" msb="32" lsb="25">
+        <name>σx</name>
+        <format>uint</format>
+        <unit>m</unit>
+        <scale>0.25</scale>
+        <desc>Standard Deviation of X component LSB= 0.25 m</desc>
+      </field>
+      <field octed="1" msb="24" lsb="17">
+        <name>σy</name>
+        <format>uint</format>
+        <unit>m</unit>
+        <scale>0.25</scale>
+        <desc>Standard Deviation of Y component LSB= 0.25 m</desc>
+      </field>
+      <field octed="1" msb="16" lsb="1">
+        <name>σxy</name>
+        <format>int</format>
+        <unit>m^2</unit>
+        <scale>0.25</scale>
+        <desc>Covariance in two’s complement form LSB= 0.25 m²</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I010/550" frn="20" format="fixed" length="1">
+      <name>System Status</name>
+      <definition>Information concerning the configuration and status of a System.</definition>
+      <field octed="1" msb="8" lsb="7">
+        <name>NOGO</name>
+        <desc>Operational Release Status of the System</desc>
+        <enum value="00b">Operational</enum>
+        <enum value="01b">Degraded</enum>
+        <enum value="10b">NOGO</enum>
+      </field>
+      <field octed="1" msb="6" lsb="6">
+        <name>OVL</name>
+        <desc>Overload indicator</desc>
+        <enum value="0b">No overload</enum>
+        <enum value="1b">Overload</enum>
+      </field>
+      <field octed="1" msb="5" lsb="5">
+        <name>TSV</name>
+        <desc>Time source validity</desc>
+        <enum value="0b">valid</enum>
+        <enum value="1b">invalid</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>DIV</name>
+        <enum value="0b">Normal Operation</enum>
+        <enum value="1b">Diversity degraded</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>TTF</name>
+        <enum value="0b">Test Target Operative</enum>
+        <enum value="1b">Test Target Failure</enum>
+      </field>
+      <field octed="1" msb="2" lsb="1">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. For a radar, bit-4 (DIV) is set to zero either when diversity is not used, or when diversity is used and operational.
+    </desc>
+    </dataitem>
+    <dataitem id="I010/SP" frn="27" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>
+    <dataitem id="I010/RE" frn="28" format="explicit" length="1">
+      <name>Reserved Expansion Field</name>
+    </dataitem>
+  </category>
+</asterix>

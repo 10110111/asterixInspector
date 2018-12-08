@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+<asterix>
+<!--
+  Part 15
+
+  CNS/ATM Ground Station and Service Status Reports
+
+  Edition: 1.2
+-->
+  <category cat="23" version="1.2">
+    <dataitem id="I023/000" frn="2" format="fixed" length="1">
+      <name>Report Type</name>
+      <definition>This Data Item allows for a more convenient handling of the reports at the receiver side by further defining the type of transaction.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Report Type</name>
+        <enum value="1">Ground Station Status report</enum>
+        <enum value="2">Service Status report</enum>
+        <enum value="3">Service Statistics report</enum>
+      </field>
+    </dataitem>
+    <dataitem id="I023/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <definition>Identification of the radar station from which the data are received.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+        The up-to-date list of SACs is published on the Eurocontrol Web Site (http://www.eurocontrol.int/asterix).
+      </desc>
+    </dataitem>
+    <dataitem id="I023/015" frn="3" format="fixed" length="1">
+      <name>Service Type and Identification</name>
+      <definition>Identifies the type of service being reported.</definition>
+      <field octed="1" msb="8" lsb="5">
+        <name>SID</name>
+        <desc>Service Identifier</desc>
+      </field>
+      <field octed="1" msb="4" lsb="1">
+        <name>STYP</name>
+        <desc>Type of Service</desc>
+        <enum value="1">ADS-B VDL4</enum>
+        <enum value="2">ADS-B Ext Squitter</enum>
+        <enum value="3">ADS-B UAT</enum>
+        <enum value="4">TIS-B VDL4</enum>
+        <enum value="5">TIS-B Ext Squitter</enum>
+        <enum value="6">TIS-B UAT</enum>
+        <enum value="7">FIS-B VDL4</enum>
+        <enum value="8">GRAS VDL4</enum>
+        <enum value="9">MLT</enum>
+      </field>
+      <desc><b>NOTE</b>: The service identification is allocated by the system.<br/><b>NOTE</b>: The service identification is also available in item I021/015.<br/></desc>
+    </dataitem>
+    <dataitem id="I023/070" frn="4" format="fixed" length="3">
+      <name>Time of Day</name>
+      <definition>Absolute time stamping expressed as UTC time.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>uint</format>
+        <name>Time of Day</name>
+        <desc>(LSB) = (2^-7)s = 1/128 s</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+        1. The time of day value is reset to zero each day at midnight.
+      </desc>
+    </dataitem>
+    <dataitem id="I023/100" frn="5" format="variable" length="1">
+      <name>Ground Station Status</name>
+      <definition>Information concerning the status of a Ground Station.</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>NOGO</name>
+        <enum value="0">Data is released for operational use</enum>
+        <enum value="1">Data must not be used operationally</enum>
+      </field>
+      <field octed="1" msb="7" lsb="7">
+        <name>ODP</name>
+        <desc>Data Processor Overload Indicator</desc>
+        <enum value="0">Default, no overload</enum>
+        <enum value="1">Overload in DP</enum>
+      </field>
+      <field octed="1" msb="6" lsb="6">
+        <name>OXT</name>
+        <enum value="0">Default, no overload</enum>
+        <enum value="1">Overload in transmission subsystem</enum>
+      </field>
+      <field octed="1" msb="5" lsb="5">
+        <name>MSC</name>
+        <enum value="0">Monitoring system not connected or unknown</enum>
+        <enum value="1">Monitoring system connected</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>TSV</name>
+        <enum value="0">valid</enum>
+        <enum value="1">invalid</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>SPO</name>
+        <enum value="0">no spoofing detected</enum>
+        <enum value="1">potential spoofing attack</enum>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>RN</name>
+        <enum value="0">default</enum>
+        <enum value="1">track numbering has restarted</enum>
+      </field>
+      <field octed="2" msb="8" lsb="2">
+        <name>GSSP</name>
+        <desc>Ground Station Status Reporting Period</desc>
+        <format>uint</format>
+      </field>
+      <desc><b>NOTES</b><br/>
+        1. A time source is considered as valid when either externally synchronised or running on a local oscillator within the required accuracy of UTC.<br/>
+        2. Bit 8 (NOGO), when set to "1" indicates that the data transmitted by the GS is not released for operational use.<br/>
+        3. Bit 2 indicates that the allocation of Track-IDs (Item I021/161) was restarted.<br/>
+      </desc>
+    </dataitem>
+    <dataitem id="I023/101" frn="6" format="variable" length="2">
+      <name>Service Configuration</name>
+      <definition>Information concerning the configuration of a Service.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>RP</name>
+        <desc>Reporting Period</desc>
+        <format>uint</format>
+      </field>
+      <field octed="2" msb="8" lsb="6">
+        <name>SC</name>
+        <desc>Service Class</desc>
+        <enum value="0">No Information</enum>
+        <enum value="1">NRA class</enum>
+      </field>
+      <field octed="2" msb="5" lsb="2">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="3" msb="8" lsb="2">
+        <name>SSRP</name>
+        <desc>Service Status Reporting Period</desc>
+        <format>uint</format>
+      </field>
+    </dataitem>
+    <dataitem id="I023/110" frn="8" format="fixed" length="1">
+      <name>Service Status</name>
+      <definition>Information concerning the status of the Service provided by a Ground Station.</definition>
+      <field octed="1" msb="4" lsb="2">
+        <name>STAT</name>
+        <desc>Status of the Service</desc>
+        <enum value="0">Unknown</enum>
+        <enum value="1">Failed</enum>
+        <enum value="2">Disabled</enum>
+        <enum value="3">Degraded</enum>
+        <enum value="4">Normal</enum>
+        <enum value="5">Initialisation</enum>
+      </field>
+    </dataitem>
+    <dataitem id="I023/120" frn="9" format="repetive" length="6">
+      <name>Service Statistics</name>
+      <definition>Statistics concerning the service. Provides counts of various ADS-B message types that have been received since the report was last sent.</definition>
+      <field octed="1" msb="48" lsb="41">
+        <name>TYPE</name>
+        <desc>Type of report counter, encoded as follows</desc>
+        <format>uint</format>
+        <enum value="0">Number of unknown messages received</enum>
+        <enum value="1">Number of 'too old' messages received</enum>
+        <enum value="2">Number of failed message conversions</enum>
+        <enum value="3">Total Number of messages received</enum>
+        <enum value="4">Total number of messages transmitted</enum>
+        <enum value="20">Number of TIS-B management messages received </enum>
+        <enum value="21">Number of 'Basic' messages received</enum>
+        <enum value="22">Number of 'High Dynamic' messages received</enum>
+        <enum value="23">Number of 'Full Position' messages received</enum>
+        <enum value="24">Number of 'Basic Ground' messages received</enum> 
+        <enum value="25">Number of 'TCP' messages received</enum> 
+        <enum value="26">Number of 'UTC time' messages received</enum> 
+        <enum value="27">Number of 'Data' messages received</enum>  
+        <enum value="28">Number of 'High Resolution' messages received</enum> 
+        <enum value="29">Number of 'Aircraft Target Airborne' messages received.</enum> 
+        <enum value="30">Number of 'Aircraft Target Ground' messages received.</enum> 
+        <enum value="31">Number of 'Ground Vehicle Target' messages received.</enum> 
+        <enum value="32">Number of '2 slots TCP' messages received.</enum>
+      </field>
+      <field octed="1" msb="40" lsb="40">
+        <name>REF</name>
+        <desc>Reference from which the messages are counted</desc>
+        <enum value="0">From midnight</enum>
+        <enum value="1">From the last report</enum>
+      </field>
+      <field octed="1" msb="39" lsb="33">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>      
+      <field octed="1" msb="32" lsb="1">
+        <name>COUNTER VALUE</name>
+        <desc>32-bit counter value</desc>
+        <format>uint</format>
+      </field>      
+    </dataitem>
+    <dataitem id="I023/200" frn="7" format="fixed" length="1">
+      <name>Operational Range</name>
+      <definition>Currently active operational range of the Ground Station.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Range</name>
+        <desc>Operational range of the GS (LSB=1NM)</desc>
+        <format>uint</format>
+      </field>
+      <desc><b>NOTE</b><br/>
+        1. Maximum value indicates "maximum value or above".<br/>
+      </desc>
+    </dataitem>
+  </category>
+</asterix>

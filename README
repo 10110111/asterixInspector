@@ -1,0 +1,37 @@
+
+
+AsterixInspector 
+================
+
+displays contents of files in Eurocontrol Asterix format. 
+Asterix is a binary data format standard for data exchange in aviation.
+
+
+Author: Volker Poplawski (volker@openbios.org)
+
+Contributions by:
+Ray Hayes (Cat23 specification)
+
+
+Building from source
+--------------------
+
+This requires a working Qt 5.1 or greater environment including webkit
+
+Run
+	qmake
+
+than run
+	make
+
+
+Modifying the Asterix specification
+-----------------------------------
+
+The specification definition AsterixInspector uses to decode files can be modified and extended to your needs.
+To provide your own specification of a Asterix category look in the directory asterixSpecification/. 
+Specification files in this directory are read during application start. Copy the one which closely resembles 
+the one you need to a new file. In the <asterix> tag assign the category number and a version string to 
+distinguish your version. Multiple versions for the same category can be specified. The version used for 
+decoding is specified in the 'Specification' dialog before loading a data file.
+

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="asterix">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="category"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="itemformat">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="explicit"/>
+      <xs:enumeration value="fixed"/>     
+      <xs:enumeration value="variable"/>
+      <xs:enumeration value="compound"/>
+      <xs:enumeration value="repetive"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="category">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="dataitem"/>
+      </xs:sequence>
+      <xs:attribute name="cat" use="required" type="xs:integer"/>
+      <xs:attribute name="version" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dataitem">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name"/>
+        <xs:element minOccurs="0" ref="definition"/>
+        <xs:choice>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="field"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="subfield"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="desc"/>
+      </xs:sequence>
+      <xs:attribute name="format" use="required" type="itemformat"/>
+      <xs:attribute name="frn" use="required" type="xs:integer"/>
+      <xs:attribute name="length" use="required" type="xs:integer"/>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="subfield">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="name"/>
+        <xs:choice minOccurs="0">
+          <xs:element ref="definition"/>
+          <xs:element ref="description"/>
+        </xs:choice>
+        <xs:element maxOccurs="unbounded" ref="field"/>
+        <xs:element minOccurs="0" ref="desc"/>
+      </xs:sequence>
+      <xs:attribute name="format" use="required" type="xs:NCName"/>
+      <xs:attribute name="frn" use="required" type="xs:integer"/>
+      <xs:attribute name="length" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="description" type="xs:string"/>
+  <xs:element name="name" type="xs:string"/>
+  <xs:element name="definition" type="xs:string"/>
+  <xs:element name="field">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="desc"/>
+          <xs:element ref="name"/>
+          <xs:element ref="enum"/>
+          <xs:element ref="format"/>
+          <xs:element ref="scale"/>
+          <xs:element ref="unit"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="mandatory"/>
+      </xs:sequence>
+      <xs:attribute name="lsb" use="required" type="xs:integer"/>
+      <xs:attribute name="msb" use="required" type="xs:integer"/>
+      <xs:attribute name="octed" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="enum">
+    <xs:complexType mixed="true">
+      <xs:attribute name="value" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="scale" type="xs:string"/>
+  <xs:element name="unit" type="xs:string"/>
+  <xs:element name="mandatory">
+    <xs:complexType>
+      <xs:attribute name="value" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="desc">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="b"/>
+        <xs:element ref="br"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="b" type="xs:NCName"/>
+  <xs:element name="br">
+    <xs:complexType/>
+  </xs:element>
+</xs:schema>

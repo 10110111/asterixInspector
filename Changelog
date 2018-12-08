@@ -1,0 +1,176 @@
+AsterixInspector 0.12.3
+-----------------------
+* Correction to Cat7 (issue #15)
+* Correction to Cat48
+* Correction to Cat62
+* Added a time-of-day column to the list of records. Displays the time-of-day field if applicable.
+* Using system default fixed width font for hex view
+* Corrections alignment of highlight region and cursor in hex view
+
+
+AsterixInspector 0.12.2
+-----------------------
+* Added Cat19
+* Added Cat25
+* Correction to Cat64 (issue #14)
+
+
+AsterixInspector 0.12.1
+-----------------------
+* Improved handling of repetive fields
+* Improved handling on non standard compliant data
+* Added missing data item to Cat23
+* Corrected wrong FRN in Cat2
+* Added unit definitions to various Cats
+
+
+AsterixInspector 0.12.0
+-----------------------
+* Added Cat247
+* Renamed dataItem 'name' attribute to 'id' in specification xml files
+
+
+AsterixInspector 0.11.0 
+-----------------------
+* XML text output added
+* Added Cat21 V2.2, Cat62 V1.17
+* Corrections to Cat62 V1.12
+
+
+AsterixInspector 0.10.1
+-----------------------
+* Fixes for win32 compilation and deployment
+* Fixes for linux deployment
+* Added cmd line option for specifications directory
+
+
+AsterixInspector 0.10.0
+-----------------------
+* Upgraded to Qt5
+* Asterix Xml specification split into several files. Support for user defined specs.
+* Specification selection dialog
+* Added log output pane 
+* Added Cat240
+* Fixed error in field decoding
+* Minor fixes to code and specifications
+
+
+AsterixInspector 0.9.5
+----------------------
+* Added Cat20
+* Added unit definitions to Cat1 & Cat2
+* Minor corrections to Cat1
+
+
+AsterixInspector 0.9.4
+----------------------
+* Corrected FRN on I063/050
+* Bug fixes to #3567772, #3602486
+
+
+AsterixInspector 0.9.3
+----------------------
+* Added Cat63.
+* Typo and spelling fixes to specification.
+
+
+AsterixInspector 0.9.2
+----------------------
+* Added meassurement units to text report.
+* Spare fields suppressed in text report.
+* Added unit definitons to Cat11.
+* Fixed typo in Cat62 (issue ID: 3570152), Cat1 and Cat4
+
+
+AsterixInspector 0.9.1
+----------------------
+* Bug fix #3567460
+* Updated Cat7 to edition 1.5
+* Added unit definitions to Cat7
+* Added Cat65
+
+
+AsterixInspector 0.9.0
+----------------------
+* New feature: unit of measuremnt on data item fields
+* New feature: bit table on data items
+* Added unit definitions to Cat10 and Cat62
+* Added SP and RE items to Cat1
+* Some minor corrections to spec
+
+
+AsterixInspector 0.8.2
+----------------------
+* Fixed crash after file load
+
+
+AsterixInspector 0.8.1
+----------------------
+* Correction to Cat62 fixes issues 3530211, 3530210
+
+
+AsterixInspector 0.8.0
+----------------------
+* New feature: textual report generation
+* Bug fix #3491366 (correction to I034/050)
+* Added Cat21
+
+
+AsterixInspector 0.7.4
+----------------------
+* Bug fixes #3421657, #3424955
+* Corrections to spec I048/120, Cat10, Cat62
+
+
+AsterixInspector 0.7.3
+----------------------
+* Added Cat23 (thanks Ray Hayes)
+* Correction to I007/030 spec
+
+
+AsterixInspector 0.7.2
+----------------------
+* Added Cat7 (downlink UAP only)
+
+
+AsterixInspector 0.7.1
+----------------------
+* Fixed selection behaviour in the block/record/item lists
+
+
+AsterixInspector 0.7.0
+----------------------
+* Added a record view, which shows fspec field
+* asterix_specification.xml is now well-formed xml
+* Updated specification Cat48 to edition 1.20
+
+
+AsterixInspector 0.6.3
+----------------------
+* Octal fields interpreted
+* Fixed bug with small files
+* Correction to Cat10 spec
+* Added small Cat10 example
+
+
+AsterixInspector 0.6.2
+----------------------
+* Added Cat1 (track UAP only)
+* Added Cat2
+* Added Cat4
+
+
+AsterixInspector 0.6.1
+----------------------
+* Cursor position in statusbar
+* Minor fixes
+
+
+AsterixInspector 0.6.0
+----------------------
+* There's a Changelog now
+* Added Cat48
+* Selection of arbitrary descode position in hex view.
+  This helps working with corrupt data.
+* Not-present fields in item of format 'variable' suppressed in data item
+  view

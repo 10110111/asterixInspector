@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+<asterix>
+  <!--
+  Part 3 : Category 8
+  Transmission of Monoradar Derived  Weather Information
+
+  Edition: 1.1
+  Edition Date: November 2010
+-->
+  <category cat="8" version="1.1">
+    <dataitem id="I008/000" frn="2" format="fixed" length="1">
+      <name>Message Type</name>
+      <definition>This Data Item allows for a more convenient handling of the messages at the receiver side by further defining the type of transaction.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Message Type</name>
+        <enum value="1">Polar vector</enum>
+        <enum value="2">Cartesian vector of start point/ length</enum>
+        <enum value="3">Contour record</enum>
+        <enum value="4">Cartesian start point and end point vector</enum>
+        <enum value="254">SOP message</enum>
+        <enum value="255">EOP message</enum>
+      </field>
+    </dataitem>
+    <dataitem id="I008/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <definition>Identification of the system from which the data are received.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code fixed to zero</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. The defined SACs are listed in Part 1, Table 2 [Ref. 2].<br/>
+      2. The defined SICs are listed in Part 1, Annex B [Ref. 2].<br/>
+      </desc>
+    </dataitem>
+    <dataitem id="I008/020" frn="3" format="variable" length="1">
+      <name>Vector Qualifier</name>
+      <definition>Precipitation intensity level, shading orientation of the vectors representing the precipitation area and coordinate system used.</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>ORG</name>
+        <enum value="0">Local Coordinates</enum>
+        <enum value="1">System Coordinates</enum>
+      </field>
+      <field octed="1" msb="7" lsb="5">
+        <name>Intensity Level</name>
+        <desc>Range zero to seven</desc>
+      </field>
+      <field octed="1" msb="4" lsb="2">
+        <name>Heading</name>
+        <desc>Shading Orientation with respect to north</desc>
+        <enum value="000b">0°</enum>
+        <enum value="001b">22.5°</enum>
+        <enum value="010b">45°</enum>
+        <enum value="011b">67.5°</enum>
+        <enum value="100b">90°</enum>
+        <enum value="101b">112,5°</enum>
+        <enum value="110b">135°</enum>
+        <enum value="111b">157.5°</enum>
+      </field>
+      <field octed="2" msb="8" lsb="4">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>TST</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Test Vector</enum>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>TST</name>
+        <enum value="0">Default</enum>
+        <enum value="1">Error condition encountered</enum>
+      </field>
+      <desc><b>NOTE</b><br/>
+      For polar vectors octed 1, bits-4/2 are meaningless and are set to zero.
+      </desc>
+    </dataitem>
+    <dataitem id="I008/034" frn="5" format="repetive" length="4">
+      <name>Sequence of Polar Vectors in SPF Notation</name>
+      <definition>Sequence of weather vectors in local polar coordinates.</definition>
+      <field octed="1" msb="32" lsb="25">
+        <name>Start Range</name>
+        <desc>2^(-7+f) NM. Max. range = 2^(1+f) NM</desc>
+        <format>uint</format>
+        <unit>nmi</unit>
+        <scale>2^-7</scale>
+      </field>
+      <field octed="1" msb="24" lsb="17">
+        <name>End Range</name>
+        <desc>2^(-7+f) NM. Max. range = 2^(1+f) NM</desc>
+        <format>uint</format>
+        <unit>nmi</unit>
+        <scale>2^-7</scale>
+      </field>
+      <field octed="1" msb="16" lsb="1">
+        <name>Azimuth</name>
+        <desc>360°/(2^16) = 0.0055°</desc>
+        <format>uint</format>
+        <unit>deg</unit>
+        <scale>360/(2^16)</scale>
+      </field>
+      <desc><b>NOTE</b><br/>
+      f is a parameter of the SOP message.
+      </desc>
+    </dataitem>
+    <dataitem id="I008/036" frn="4" format="repetive" length="3">
+      <name>Sequence of Cartesian Vectors in SPF Notation</name>
+      <definition>Sequence of weather vectors, in the representation start point/ length, in local or in system cartesian coordinates.</definition>
+      <field octed="1" msb="24" lsb="17">
+        <name>X-Component</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <field octed="1" msb="16" lsb="9">
+        <name>Y-Component</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>Length</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. f is a parameter of the SOP message.<br/>
+      2. Negative values are expressed in 2's complement form, bit-24 and bit-16
+      are set to 0 for positive values and 1 for negative values.
+      </desc>
+    </dataitem>
+    <dataitem id="I008/038" frn="12" format="repetive" length="4">
+      <name>Sequence of Weather Vectors in SPF Notation</name>
+      <definition>Sequence of weather vectors, in the representation start point/ end point, in local or in system cartesian coordinates.</definition>
+      <field octed="1" msb="32" lsb="25">
+        <name>X1 Component</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <field octed="1" msb="24" lsb="17">
+        <name>Y1 Component</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <field octed="1" msb="16" lsb="9">
+        <name>X2 Component</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>Y2 Component</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. f is a parameter of the SOP message.<br/>
+      2. Negative values are expressed in 2's complement form, bits-32, 24, 16
+      and 8 are set to 0 for positive values and 1 for negative values.
+      </desc>
+    </dataitem>
+    <dataitem id="I008/040" frn="6" format="fixed" length="2">
+      <name>Contour Identifier</name>
+      <definition>Contour serial number together with the precipitation intensity levels and the coordinates system used.</definition>
+      <field octed="1" msb="16" lsb="16">
+        <name>ORG</name>
+        <enum value="0">Local Coordinates</enum>
+        <enum value="1">System Coordinates</enum>
+      </field>
+      <field octed="1" msb="15" lsb="13">
+        <name>Intensity Level</name>
+        <desc>Range zero to seven</desc>
+      </field>
+      <field octed="1" msb="12" lsb="11">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"/>
+      </field>
+      <field octed="1" msb="10" lsb="9">
+        <name>Heading</name>
+        <desc>Shading Orientation with respect to north</desc>
+        <enum value="00b">Intermediate record of a contour</enum>
+        <enum value="01b">Last record of a contour of at least two records</enum>
+        <enum value="10b">First record of a contour of at least two records</enum>
+        <enum value="11b">First and only record, fully defining a contour</enum>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>CSN</name>
+        <desc>Contour Serial Number</desc>
+      </field>
+      <desc><b>NOTE</b><br/>
+      The Contour Serial Number provides an unambiguous identification for
+      each contour record. Within one update cycle, a serial number shall
+      never be assigned twice.
+      </desc>
+    </dataitem>
+    <dataitem id="I008/050" frn="7" format="repetive" length="2">
+      <name>Sequence of Contour Points in SPF Notation</name>
+      <definition>Repetitive Data Item, starting with a one-octet Field Repetition Indicator (REP) indicating the number of consecutive points followed by the X and Y coordinates of each point.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>X(1)</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>Y(1)</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. f is a parameter of the SOP message.<br/>
+      2. Negative values are expressed in 2's complement form, bit-16 and bit-8
+      shall be set to 0 for positive values and 1 for negative values.
+      </desc>
+    </dataitem>
+    <dataitem id="I008/090" frn="8" format="fixed" length="3">
+      <name>Time of Day</name>
+      <definition>Absolute time stamping expressed as Coordinated Universal Time (UTC) time.</definition>
+      <field octed="1" msb="24" lsb="1">
+        <format>uint</format>
+        <name>Time Of Day</name>
+        <unit>s</unit>
+        <scale>1/128</scale>
+        <desc>(LSB) = (2^-7)s = 1/128 s</desc>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. The time of day value is reset to zero each day at midnight.<br/>
+      2. For time management in radar transmission applications, refer to Part 1, paragraph 5.4 [Ref. 2].
+      </desc>
+    </dataitem>
+    <dataitem id="I008/100" frn="9" format="variable" length="3">
+      <name>Processing Status</name>
+      <definition>Information concerning the scaling factor currently applied, current reduction step in use, etc.</definition>
+      <field octed="1" msb="24" lsb="20">
+        <name>f</name>
+        <desc>Scaling factor, negative values are represented in 2's complement form, bit-24 is set to 0 for positive values and 1 for negative values.</desc>
+        <format>int</format>
+      </field>
+      <field octed="1" msb="19" lsb="17">
+        <name>R</name>
+        <desc>Current reduction stage in use. Normal operation is indicated by a value of zero. The actual bit signification is application dependent.</desc>
+        <format>uint</format>
+      </field>
+      <field octed="1" msb="16" lsb="2">
+        <name>Q</name>
+        <desc>Processing parameters. The actual bit signification is application dependent.</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>Y2 Component</name>
+        <desc>2^(-6+f) NM</desc>
+        <format>int</format>
+        <unit>nmi</unit>
+        <scale>2^-6</scale>
+      </field>
+      <desc><b>NOTES</b><br/>
+      1. f is a parameter of the SOP message.<br/>
+      2. Negative values are expressed in 2's complement form, bits-32, 24, 16
+      and 8 are set to 0 for positive values and 1 for negative values.
+      </desc>
+    </dataitem>
+    <dataitem id="I008/110" frn="10" format="variable" length="1">
+      <name>Station Configuration Status</name>
+      <definition>Information concerning the use and status of some vital hardware components of a radar system.</definition>
+      <field octed="1" msb="8" lsb="2">
+        <name>Status</name>
+      </field>
+      <desc><b>NOTE</b><br/>
+      Due to the diversity in hardware design and requirements of
+      present and future radar stations, it is felt impractical to attempt to
+      define individual bits.
+      </desc>
+    </dataitem>
+    <dataitem id="I008/120" frn="11" format="fixed" length="2">
+      <name>Total Number of Items Constituting One Weather Picture</name>
+      <definition>Total number of vectors, respectively contour points, constituting the total weather image, provided with the EOP message.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>Total number of items</name>
+        <desc>max. 65535</desc>
+        <format>uint</format>
+      </field>
+    </dataitem>
+    <dataitem id="I008/SP" frn="13" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>
+  </category>
+</asterix>

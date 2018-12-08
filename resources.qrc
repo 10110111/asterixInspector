@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/radar.svg</file>
+        <file>dataItem.css</file>
+    </qresource>
+</RCC>

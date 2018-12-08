@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Part of the AsterixInspector project
+
+  http://asterix.sourceforge.net
+
+  by Volker Poplawski
+-->
+
+<asterix>
+  <!--
+  Part 18 : Category 19
+  Multilateration System Status Messages
+
+  Edition: 1.3
+-->
+  <category cat="19" version="1.3">
+    <dataitem id="I019/000" frn="2" format="fixed" length="1">
+      <name>Message Type</name>
+      <definition>This Data Item allows for a more convenient handling of the messages at the receiver side by further defining the type of information.</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Message Type</name>
+        <enum value="0">Start of Update Cycle</enum>
+        <enum value="1">Periodic Status Message</enum>        
+        <enum value="2">Event-triggered Status Message</enum>        
+      </field>
+      <desc>
+          <b>Notes:</b><br/>
+          1. In applications where data of various types is exchanged, the Message Type Data Item facilitates the proper message handling at the receiver side.<br/>
+          2. All Message Type values are reserved for common standard use.<br/>
+          3. The following set of Message Types are standardised for category 019 records:<br/>
+          • 001 Start of Update Cycle<br/>
+          • 002 Periodic Status Message<br/>
+          • 003 Event-triggered Status Message<br/>
+      </desc>      
+    </dataitem>      
+    <dataitem id="I019/010" frn="1" format="fixed" length="2">
+      <name>Data Source Identifier</name>
+      <encodingrule>mandatory</encodingrule>
+      <definition>Identification of the system from which the data is received.</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>SAC</name>
+        <desc>System Area Code</desc>
+      </field>
+      <field octed="1" msb="8" lsb="1">
+        <name>SIC</name>
+        <desc>System Identification Code</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I019/140" frn="3" format="fixed" length="3">
+      <name>Time of Day</name>
+      <definition>Absolute time stamping expressed as UTC.</definition>
+      <encodingrule>mandatory</encodingrule>      
+      <field octed="1" msb="24" lsb="1">
+        <name>Time of Day</name>
+        <format>uint</format>
+        <unit>s</unit>
+        <scale>1/128</scale>
+      </field>
+      <desc><b>NOTES</b><br/>
+      The time of day value is reset to 0 each day at midnight.
+      </desc>
+    </dataitem>
+    <dataitem id="I019/550" frn="4" format="fixed" length="1">
+      <name>System Status</name>
+      <definition>Information concerning the configuration and status of a System.</definition>
+      <field octed="1" msb="8" lsb="7">
+        <name>NOGO</name>
+        <desc>Operational Release Status of the System</desc>
+        <enum value="0">Operational</enum>
+        <enum value="1">Degraded</enum>
+        <enum value="2">NOGO</enum>
+        <enum value="3">undefined</enum>
+      </field>
+      <field octed="1" msb="6" lsb="6">
+        <name>OVL</name>
+        <desc>Overload indicator</desc>
+        <enum value="0">No overload</enum>
+        <enum value="1">Overload</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>TSV</name>
+        <desc>Time Source Validity</desc>
+        <enum value="0">valid</enum>
+        <enum value="1">invalid</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>TTF</name>
+        <desc>Test Target Failure</desc>
+        <enum value="0">Test Target Operative</enum>
+        <enum value="1">Test Target Failure</enum>
+      </field>
+      <field octed="1" msb="3" lsb="1">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"></mandatory>
+      </field>      
+      <desc><b>Notes</b><br/>
+          A time source is considered as valid when either externally synchronised or running on a local oscillator within the requiredaccuracy of UTC.<br/>
+          Encoding Rule: This data item shall only be sent once every minute, or event driven, if the status has changed.
+       </desc>
+    </dataitem>
+    <dataitem id="I019/551" frn="5" format="fixed" length="1">
+      <name>Tracking Processor Detailed Status</name>
+      <definition>Information concerning the configuration and status of the Tracking processors.</definition>
+      <field octed="1" msb="8" lsb="8">
+        <name>TP1</name>
+        <enum value="0">Standby</enum>
+        <enum value="1">Exec</enum>
+      </field>
+      <field octed="1" msb="7" lsb="7">
+        <name>TP1</name>
+        <enum value="0">Faulted</enum>
+        <enum value="1">Good</enum>
+      </field>
+      <field octed="1" msb="6" lsb="6">
+        <name>TP2</name>
+        <enum value="0">Standby</enum>
+        <enum value="1">Exec</enum>
+      </field>
+      <field octed="1" msb="5" lsb="5">
+        <name>TP2</name>
+        <enum value="0">Faulted</enum>
+        <enum value="1">Good</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>TP3</name>
+        <enum value="0">Standby</enum>
+        <enum value="1">Exec</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>TP3</name>
+        <enum value="0">Faulted</enum>
+        <enum value="1">Good</enum>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>TP4</name>
+        <enum value="0">Standby</enum>
+        <enum value="1">Exec</enum>
+      </field>
+      <field octed="1" msb="1" lsb="1">
+        <name>TP4</name>
+        <enum value="0">Faulted</enum>
+        <enum value="1">Good</enum>
+      </field>
+      <desc><b>Notes</b><br/>
+        Both Bits of one TP set to zero means, that this TP is not used in the system.<br/>
+        Encoding Rule: This Data item is optional. When used, it shall be transmitted only if different from zero.
+      </desc>
+    </dataitem>
+    <dataitem id="I019/552" frn="6" format="repetive" length="2">
+      <name>Remote Sensor Detailed Status</name>
+      <definition>Information concerning the configuration and status of the Remote Sensors (RS)</definition>
+      <field octed="1" msb="16" lsb="9">
+        <name>RS Identification</name>
+        <desc>8-bit Identification number of RS</desc>
+      </field>
+      <field octed="1" msb="8" lsb="8">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"></mandatory>
+      </field>      
+      <field octed="1" msb="7" lsb="7">
+        <name>RS Type</name>
+        <desc>Receiver 1090 MHz</desc>
+        <enum value="0">undefined</enum>
+        <enum value="1">present</enum>
+      </field>
+      <field octed="1" msb="6" lsb="6">
+        <name>RS Type</name>
+        <desc>Transmitter 1030 MHz</desc>
+        <enum value="0">undefined</enum>
+        <enum value="1">present</enum>
+      </field>
+      <field octed="1" msb="5" lsb="5">
+        <name>RS Type</name>
+        <desc>Transmitter 1090 MHz</desc>
+        <enum value="0">undefined</enum>
+        <enum value="1">present</enum>
+      </field>
+      <field octed="1" msb="4" lsb="4">
+        <name>Status</name>
+        <desc>RS Status</desc>
+        <enum value="0">Faulted</enum>
+        <enum value="1">Good</enum>
+      </field>
+      <field octed="1" msb="3" lsb="3">
+        <name>Status</name>
+        <desc>RS Operational</desc>
+        <enum value="0">Offline</enum>
+        <enum value="1">Online</enum>
+      </field>
+      <field octed="1" msb="2" lsb="1">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"></mandatory>
+      </field>      
+      <desc><b>Notes</b><br/>
+        Encoding Rule: This Data item is optional. When used, it shall be transmitted only if different from zero.
+      </desc>
+    </dataitem>
+    <dataitem id="I019/553" frn="7" format="variable" length="1">
+      <name>Reference Transponder Detailed Status</name>
+      <definition>Information concerning the configuration and status of the Reference Transponder.</definition>
+      <field octed="1" msb="8" lsb="7">
+        <name>Ref Trans 1</name>
+        <desc>Ref Trans 1 Status</desc>
+        <enum value="0">undefined</enum>
+        <enum value="1">Warning</enum>
+        <enum value="2">Faulted</enum>
+        <enum value="3">Good</enum>
+      </field>
+      <field octed="1" msb="6" lsb="5">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"></mandatory>
+      </field>            
+      <field octed="1" msb="4" lsb="3">
+        <name>Ref Trans 2</name>
+        <desc>Ref Trans 2 Status</desc>
+        <enum value="0">undefined</enum>
+        <enum value="1">Warning</enum>
+        <enum value="2">Faulted</enum>
+        <enum value="3">Good</enum>
+      </field>
+      <field octed="1" msb="2" lsb="2">
+        <name>Spare</name>
+        <desc>Spare Bits set to zero</desc>
+        <mandatory value="0"></mandatory>
+      </field>            
+      <desc><b>Notes</b><br/>
+        Encoding Rule: This Data item is optional. When used, it shall be transmitted only if different from zero.
+      </desc>
+    </dataitem>    
+    <dataitem id="I019/600" frn="8" format="fixed" length="8">
+      <name>Position of the MLT System Reference Point</name>
+      <definition>Position of the MLT reference point in WGS-84 Coordinates.</definition>
+      <field octed="1" msb="64" lsb="33">
+        <name>Latitude</name>
+        <format>int</format>
+        <unit>deg</unit>
+        <scale>180/2^30</scale>
+        <desc>In WGS-84 in two’s complement. Range -90 &lt;= latitude &lt;= 90 deg. LSB = 180/230 degrees</desc>
+      </field>
+      <field octed="1" msb="32" lsb="1">
+        <name>Longitude</name>
+        <format>int</format>
+        <unit>deg</unit>
+        <scale>180/2^30</scale>
+        <desc>In WGS-84 in two’s complement. Range -180 &lt;= longitude &lt;= 180 deg. LSB = 180/230 degrees</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I019/610" frn="9" format="fixed" length="2">
+      <name>Height of the MLT System Reference Point</name>
+      <definition>Height of the MLT system reference point in two’s complement form. The height shall use mean sea level as the zero reference level.</definition>
+      <field octed="1" msb="16" lsb="1">
+        <name>Height</name>
+        <format>int</format>
+        <unit>m</unit>
+        <scale>0.25</scale>
+        <desc>Height (WGS-84) above MSL. LSB= 0.25 m. Range= +/- 8 192 m</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I019/620" frn="10" format="fixed" length="1">
+      <name>WGS-84 Undulation</name>
+      <definition>WGS-84 undulation value of the MLT system reference point, in meters. Geoid undulation value is the difference between the ellipsoidal height and the height above mean sea level</definition>
+      <field octed="1" msb="8" lsb="1">
+        <name>Undulation</name>
+        <format>int</format>
+        <unit>m</unit>
+        <scale>1</scale>
+        <desc>WGS-84 Undulation value (MSL). LSB= 1 m Range= +/- 127 m</desc>
+      </field>
+    </dataitem>
+    <dataitem id="I019/RE" frn="13" format="explicit" length="1">
+      <name>Reserved Expansion Field</name>
+    </dataitem>    
+    <dataitem id="I019/SP" frn="14" format="explicit" length="1">
+      <name>Special Purpose Field</name>
+    </dataitem>    
+  </category>
+</asterix>
