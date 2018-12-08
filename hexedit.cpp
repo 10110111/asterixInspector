@@ -34,15 +34,15 @@ HexEdit::HexEdit(QWidget *parent)
   switch (m_offsetColumnMode)
   {
     case SIZE32:
-      m_sizeHint = fontMetrics().boundingRect( " 01234567: 00000000 00000000 00000000 00000000    0123456789abcdef " ).size();
+      m_sizeHint = fontMetrics().boundingRect( " 01234567: 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00    0123456789abcdef " ).size();
       break;
 
     case SIZE64:
-      m_sizeHint = fontMetrics().boundingRect( " 0123456789abcdef: 00000000 00000000 00000000 00000000    0123456789abcdef " ).size();
+      m_sizeHint = fontMetrics().boundingRect( " 0123456789abcdef: 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00    0123456789abcdef " ).size();
       break;
 
     default:
-      m_sizeHint = fontMetrics().boundingRect( " 00000000 00000000 00000000 00000000    0123456789abcdef " ).size();
+      m_sizeHint = fontMetrics().boundingRect( " 00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00    0123456789abcdef " ).size();
       break;
   }
 
@@ -94,7 +94,7 @@ void HexEdit::paintEvent(QPaintEvent * event)
     hexX = H_MARGIN + (8 + 2) * cw;
   else if (m_offsetColumnMode == SIZE64)
     hexX = H_MARGIN + (16 + 2) * cw;
-  int asciiX = hexX + H_MARGIN + 16*2*cw + 6*cw;
+  int asciiX = hexX + H_MARGIN + 16*3*cw + 5*cw;
 
   /*
    * draw fileoffset background rect
@@ -141,6 +141,8 @@ void HexEdit::paintEvent(QPaintEvent * event)
         quint8 b = *(lineAddress + o);
         QString bs = QString("%1").arg((b), 2, 16, QChar('0'));
         hexColumn += bs;
+        if(o != bytesInLine-1)
+            hexColumn += ' ';
 
         QChar c( b );
         if (c.isPrint())
@@ -361,8 +363,8 @@ QPair<int,int> HexEdit::calculateHexTextArea(const QString &hexStr, int start, i
 {
   start = qBound(0, start, 16);
   end = qMin(end, 16);
-  int start_char_ofs = (start/4) * (8+1) + (start%4) * 2;
-  int end_char_ofs = (end/4) * (8+1) + (end%4) * 2;
+  int start_char_ofs = (start/4) * (8+3+2) + (start%4) * 3;
+  int end_char_ofs = (end/4) * (8+3+2) + (end%4) * 3 - 1;
 
   if (end % 4 == 0 && end > 0)  // end falls on last byte of 4byte column
   {
@@ -470,11 +472,18 @@ qint64 HexEdit::mousePosToOffset(const QPoint &pos) const
     posMargin = H_MARGIN;
   }
 
-  int asciiX = posMargin - H_MARGIN + (4*8 + 3*1 + 4)*cw;
+  int asciiX = posMargin - H_MARGIN + (4*(8+3) + 3*2 + 4)*cw;
 
   int xofs;
   if (pos.x() < asciiX)
-    xofs = (pos.x() - posMargin - ((pos.x() - posMargin) / (cw*9))*cw) / cw / 2;
+  {
+    const int x = pos.x() - posMargin + cw;
+    const int blockWidth = (8+3+2)*cw;
+    const int byteWidth = 3*cw;
+    const int blockNumber = x / blockWidth;
+    const int byteInBlock = qBound(0, (x % blockWidth - cw/2) / byteWidth, 3);
+    xofs = blockNumber * 4 + byteInBlock;
+  }
   else
     xofs = (pos.x() - asciiX) / cw;
 
