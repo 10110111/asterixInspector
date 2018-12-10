@@ -110,6 +110,12 @@ void MainWindow::createDockWidgets()
   hexDock->setWidget(m_hexEdit);
   addDockWidget(Qt::RightDockWidgetArea, hexDock);
 
+  QDockWidget* hexDumpLoadDock = new QDockWidget("Hex dump to load data from");
+  m_hexDumpLoadEdit = new TextHexDumpEdit(this);
+  hexDumpLoadDock->setWidget(m_hexDumpLoadEdit);
+  addDockWidget(Qt::RightDockWidgetArea, hexDumpLoadDock);
+  connect(m_hexDumpLoadEdit, &TextHexDumpEdit::hexDumpLoaded, this, &MainWindow::readFile);
+
   m_detailDock = new QDockWidget("Data Item");
   m_dataItemWidget = new DataItemWidget(this);
   m_detailDock->setWidget(m_dataItemWidget);

@@ -13,7 +13,7 @@
 #include "hexedit.h"
 #include "dataItemWidget.h"
 #include "recordWidget.h"
-
+#include "TextHexDumpEdit.h"
 
 namespace Ui {
     class MainWindow;
@@ -61,6 +61,7 @@ protected:
     QLabel*                 m_cursorPosLabel;
 
     HexEdit*                m_hexEdit;
+    TextHexDumpEdit*        m_hexDumpLoadEdit;
     QDockWidget*            m_detailDock;
     DataItemWidget*         m_dataItemWidget;
     RecordWidget*           m_recordWidget;

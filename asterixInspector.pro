@@ -27,6 +27,7 @@ SOURCES += main.cpp\
     scale_expression.flex.cpp \
     scaleExpressionParser.cpp \
     specificationSelectDialog.cpp \
+    TextHexDumpEdit.cpp \
     logger.cpp
 
 HEADERS  += mainWindow.h \
@@ -44,9 +45,11 @@ HEADERS  += mainWindow.h \
     scaleExpressionParser.h \
     specificationSelectDialog.h \
     logger.h \
+    TextHexDumpEdit.h \
     bit.h
 
 FORMS    += mainWindow.ui \
+    TextHexDumpEdit.ui \
     specificationSelectDialog.ui
 
 RESOURCES += \
