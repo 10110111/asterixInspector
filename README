@@ -16,7 +16,7 @@ Ray Hayes (Cat23 specification)
 Building from source
 --------------------
 
-This requires a working Qt 5.1 or greater environment including webkit
+This requires a working Qt 5.4 or greater environment including webengine
 
 Run
 	qmake
