@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += widgets gui xml webkit webkitwidgets network
+QT       += widgets gui xml webenginewidgets network
 
 QMAKE_CXXFLAGS += -std=c++11
 

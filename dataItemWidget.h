@@ -8,7 +8,7 @@
 #define DATAITEMWIDGET_H
 
 #include <QtGui>
-#include <QWebView>
+#include <QtWebEngineWidgets>
 
 #include "asterix.h"
 
@@ -33,7 +33,7 @@ public slots:
     QSize sizeHint() const { return QSize(100, 300); }
 
     QString      m_css;
-    QWebView*    m_webView;
+    QWebEngineView* m_webView;
 };
 
 #endif // DATAITEMWIDGET_H

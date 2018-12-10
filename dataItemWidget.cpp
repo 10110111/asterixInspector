@@ -24,9 +24,9 @@ DataItemWidget::DataItemWidget(QWidget *parent) :
 
   m_css = cssFile.readAll();
 
-  m_webView = new QWebView(0);
-  m_webView->settings()->setFontFamily(QWebSettings::StandardFont, QFont().family());
-  m_webView->settings()->setFontSize(QWebSettings::DefaultFontSize, QFont().pointSize() * 1.4);
+  m_webView = new QWebEngineView(0);
+  m_webView->settings()->setFontFamily(QWebEngineSettings::StandardFont, QFont().family());
+  m_webView->settings()->setFontSize(QWebEngineSettings::DefaultFontSize, QFont().pointSize() * 1.4);
   m_webView->setMinimumSize(100, 88);
   m_webView->resize(100, 88);
   layout()->addWidget(m_webView);
