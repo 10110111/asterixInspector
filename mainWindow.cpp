@@ -67,6 +67,10 @@ MainWindow::MainWindow(QWidget *parent) :
   {
     specDirectories << "/usr/share/asterixInspector/asterixSpecification";
   }
+  if (QFileInfo(QDir::homePath()+"/opt/asterixInspector/share/asterixSpecification").isDir())
+  {
+      specDirectories << QDir::homePath()+"/opt/asterixInspector/share/asterixSpecification";
+  }
 #endif
 
   if (not g_specsDirectory.isEmpty())
